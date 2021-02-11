@@ -63,7 +63,7 @@ const createImages = async (query /* string */) => {
 };
 
 const createIntro = (query /* string */) => {
-  const intro = document.createElement("p");
+  const intro = document.createElement("h3");
   intro.className = "locality-intro";
   intro.innerText = `Here are the results for "${query}" in your area!`;
   return intro;
@@ -89,6 +89,11 @@ const getQuery = () => {
     display.className = "locality-window";
 
     const query = getQuery();
+    if (query.length < 3) {
+      // Query is not long enough, don't show the popup
+      return;
+    }
+
     await createImages(query).then((images) => {
       if (images.length < 3) {
         // Not enough options to display, don't show the popup
