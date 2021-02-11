@@ -1,0 +1,13 @@
+{
+  "name": " Locality",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "A local economy search tool",
+  "content_scripts": [
+    {
+      "js": ["init.js"],
+      "css": ["styles.css"],
+      "matches": ["*://www.google.ca/search*", "*://www.google.com/search*"]
+    }
+  ]
+}

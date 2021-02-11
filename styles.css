@@ -1,0 +1,159 @@
+/* Close Button */
+.locality-close {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  width: 32px;
+  height: 32px;
+  opacity: 0.3;
+}
+.locality-close:hover {
+  opacity: 1;
+}
+.locality-close:before,
+.locality-close:after {
+  position: absolute;
+  left: 15px;
+  content: " ";
+  height: 33px;
+  width: 2px;
+  background-color: #333;
+}
+.locality-close:before {
+  transform: rotate(45deg);
+}
+.locality-close:after {
+  transform: rotate(-45deg);
+}
+
+/* Images */
+.locality-img {
+  width: 90px;
+}
+
+/* Label */
+.locality-label {
+  width: 90px;
+  margin: 0px;
+}
+
+/* Link */
+.locality-link {
+  text-decoration: none;
+  color: #000000;
+}
+.locality-link:link {
+  text-decoration: none;
+  color: #000000;
+}
+.locality-link:visited {
+  text-decoration: none;
+  color: #000000;
+}
+.locality-link:hover {
+  text-decoration: none;
+  color: #000000;
+}
+.locality-link:active {
+  text-decoration: none;
+  color: #000000;
+}
+
+/* Content */
+.locality-stack-horizontal {
+  margin-top: 10px;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+}
+.locality-stack-horizontal > .locality-link {
+  margin-right: 10px;
+}
+.locality-stack-horizontal > .locality-link:last-child {
+  margin-right: 0px;
+}
+.locality-stack-vertical,
+.locality-stack-vertical-link {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+.locality-stack-vertical {
+  margin-top: -10px;
+}
+
+/* Shadow */
+.locality-shadow {
+  margin: 10px;
+}
+
+/* Window */
+.locality-window {
+  background: #f8f8f8;
+  border: 1px solid #cccccc;
+  border-radius: 2px;
+  box-shadow: 0 0 12px rgb(0, 0, 0, 50%);
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+  padding: 10px;
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  width: 300px;
+  z-index: 2147483647 !important;
+}
+
+/* Logo */
+.locality-logo {
+  width: 400px;
+  margin-top: -6px;
+}
+
+/* Intro */
+.locality-intro {
+  color: #000000;
+  margin-top: -30px;
+  margin-bottom: 0px;
+}
+
+/* Check it out button */
+.locality-check-it-out {
+  background-color: #449ed7;
+  border-color: #449ed7;
+  border-radius: 0.25rem;
+  border-style: none;
+  box-shadow: none;
+  color: #ffffff;
+  display: inline-block;
+  font-weight: 400;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  margin-top: 30px;
+  outline: none;
+  padding: 8px;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+  width: 100%;
+}
+.locality-check-it-out:link {
+  background-color: #449ed7;
+  border-color: #449ed7;
+}
+.locality-check-it-out:visited {
+  background-color: #449ed7;
+  border-color: #449ed7;
+}
+.locality-check-it-out:hover {
+  background-color: #3880ae;
+  border-color: #3880ae;
+}
+.locality-check-it-out:active {
+  background-color: #3880ae;
+  border-color: #3880ae;
+}
+.locality-check-it-out:target {
+  background-color: #449ed7;
+  border-color: #449ed7;
+}
