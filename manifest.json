@@ -1,13 +1,28 @@
 {
   "name": " Locality",
-  "version": "0.0.1",
-  "manifest_version": 2,
-  "description": "A local economy search tool",
+  "version": "0.0.0.1",
+  "manifest_version": 3,
+  "description": "Instantly find products from locally owned small businesses in your area without changing your search habits!",
   "content_scripts": [
     {
       "js": ["init.js"],
       "css": ["styles.css"],
-      "matches": ["*://www.google.ca/search*", "*://www.google.com/search*"]
+      "matches": [
+        "*://www.amazon.ca/s*",
+        "*://www.amazon.com/s*",
+        "*://www.etsy.com/ca/search*",
+        "*://www.walmart.ca/search*",
+        "*://www.walmart.com/search*"
+      ]
     }
-  ]
+  ],
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; connect-src https://www.mylocality.shop https://api.ipify.org; img-src img-src: https://res.cloudinary.com"
+  },
+  "icons": {
+    "16": "/icons/locality16.png",
+    "48": "/icons/locality48.png",
+    "128": "/icons/locality128.png"
+  },
+  "permissions": ["geolocation"]
 }

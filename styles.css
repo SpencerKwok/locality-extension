@@ -29,39 +29,52 @@
 /* Images */
 .locality-img {
   width: 90px;
+  vertical-align: baseline;
 }
 
 /* Label */
-.locality-label {
+.locality-label-name,
+.locality-label-price {
+  line-height: normal !important;
+  max-width: 100%;
+  margin: 0px !important;
   width: 90px;
-  margin: 0px;
+}
+.locality-label-name {
+  font-size: 12px !important;
+}
+.locality-label-price {
+  font-size: 12px !important;
 }
 
 /* Link */
 .locality-link {
-  text-decoration: none;
-  color: #000000;
+  text-decoration: none !important;
+  color: #000000 !important;
 }
 .locality-link:link {
-  text-decoration: none;
-  color: #000000;
+  text-decoration: none !important;
+  color: #000000 !important;
 }
 .locality-link:visited {
-  text-decoration: none;
-  color: #000000;
+  text-decoration: none !important;
+  color: #000000 !important;
 }
 .locality-link:hover {
-  text-decoration: none;
-  color: #000000;
+  text-decoration: none !important;
+  color: #000000 !important;
 }
 .locality-link:active {
-  text-decoration: none;
-  color: #000000;
+  text-decoration: none !important;
+  color: #000000 !important;
 }
 
 /* Content */
 .locality-stack-horizontal {
-  margin-top: 10px;
+  margin-block-start: 12px !important;
+  margin-block-end: 12px !important;
+  margin: 10px 0px 0px 0px !important;
+  max-width: 100%;
   justify-content: center;
   display: flex;
   flex-direction: row;
@@ -79,7 +92,7 @@
   flex-direction: column;
 }
 .locality-stack-vertical {
-  margin-top: -10px;
+  margin-top: -10px !important;
 }
 
 /* Shadow */
@@ -87,74 +100,97 @@
   margin: 10px;
 }
 
+/* Minimized */
+.locality-minimized {
+  height: 64px;
+  width: 64px;
+  position: fixed;
+  right: 0px;
+  top: 178px;
+  z-index: 2147483647 !important;
+}
+
 /* Window */
 .locality-window {
   background: #f8f8f8;
   border: 1px solid #cccccc;
   border-radius: 2px;
+  border-width: 0px;
   box-shadow: 0 0 12px rgb(0, 0, 0, 50%);
+  cursor: move;
   color: white;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
     Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif,
-    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-  padding: 10px;
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji !important;
+  line-height: normal !important;
   position: fixed;
   right: 20px;
-  top: 20px;
-  width: 300px;
+  top: 60px;
+  width: 322px;
   z-index: 2147483647 !important;
+}
+.locality-window > div {
+  display: flex !important;
 }
 
 /* Logo */
 .locality-logo {
-  width: 400px;
-  margin-top: -10px;
+  width: 400px !important;
+  margin: -10px 0px 0px 0px !important;
 }
 
 /* Intro */
 .locality-intro {
   color: #000000;
-  margin-top: -30px;
-  margin-bottom: 0px;
+  display: flex;
+  font-size: 14px !important;
+  font-weight: normal !important;
+  line-height: normal !important;
+  margin: -30px 0px 0px 0px !important;
+  max-width: 100%;
+  padding-bottom: 0px;
   width: 290px;
 }
 
 /* Check it out button */
 .locality-check-it-out {
-  background-color: #449ed7;
-  border-color: #449ed7;
-  border-radius: 0.25rem;
+  background-color: #449ed7 !important;
+  border-color: #449ed7 !important;
+  border-radius: 4px;
   border-style: none;
   box-shadow: none;
   color: #ffffff;
   display: inline-block;
-  font-weight: 400;
-  font-size: 1.2rem;
-  line-height: 1.5;
-  margin-top: 30px;
-  outline: none;
-  padding: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Helvetica Neue, Arial, Noto Sans, Liberation Sans, sans-serif,
+    Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  line-height: 1.5 !important;
+  margin: 12px 0px 10px 0px !important;
+  outline: none i !important;
+  padding: 8px !important;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
-    border-color 0.15s ease-in-out;
-  width: 100%;
+    border-color 0.15s ease-in-out !important;
+  width: 302px;
 }
 .locality-check-it-out:link {
-  background-color: #449ed7;
-  border-color: #449ed7;
+  background-color: #449ed7 !important;
+  border-color: #449ed7 !important;
 }
 .locality-check-it-out:visited {
-  background-color: #449ed7;
-  border-color: #449ed7;
+  background-color: #449ed7 !important;
+  border-color: #449ed7 !important;
 }
 .locality-check-it-out:hover {
-  background-color: #3880ae;
-  border-color: #3880ae;
+  background-color: #3880ae !important;
+  border-color: #3880ae !important;
 }
 .locality-check-it-out:active {
-  background-color: #3880ae;
-  border-color: #3880ae;
+  background-color: #3880ae !important;
+  border-color: #3880ae !important;
 }
 .locality-check-it-out:target {
-  background-color: #449ed7;
-  border-color: #449ed7;
+  background-color: #449ed7 !important;
+  border-color: #449ed7 !important;
 }
