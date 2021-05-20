@@ -1,8 +1,8 @@
 {
-  "name": " Locality",
-  "version": "0.0.0.1",
+  "name": " Locality - Local Shopping Made Easy",
+  "version": "0.0.0.3",
   "manifest_version": 3,
-  "description": "Instantly find products from locally owned small businesses in your area without changing your search habits!",
+  "description": "Instantly find products from locally owned small businesses in British Columbia without changing your search habits! Shopping locally has never been simpler.",
   "content_scripts": [
     {
       "js": ["init.js"],
@@ -10,8 +10,11 @@
       "matches": [
         "*://www.amazon.ca/s*",
         "*://www.amazon.com/s*",
+        "*://www.etsy.com/search*",
         "*://www.etsy.com/ca/search*",
+        "*://www.walmart.ca/browse*",
         "*://www.walmart.ca/search*",
+        "*://www.walmart.com/browse*",
         "*://www.walmart.com/search*"
       ]
     }
@@ -23,6 +26,5 @@
     "16": "/icons/locality16.png",
     "48": "/icons/locality48.png",
     "128": "/icons/locality128.png"
-  },
-  "permissions": ["geolocation"]
+  }
 }
