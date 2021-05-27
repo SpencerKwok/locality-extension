@@ -93,7 +93,15 @@ const addImages = async () => {
 
         const a = document.createElement("a");
 
-        a.href = link;
+        let url = "https://www.mylocality.shop/api/analytics/event";
+        url += "?name=extension_product_click";
+        url += `&page_location=${encodeURIComponent(
+          window.location.origin + window.location.pathname
+        )}`;
+        url += `&page_title=${encodeURIComponent(document.title)}`;
+        url += `&product_url=${encodeURIComponent(link)}`;
+        url += `&redirect_url=${encodeURIComponent(link)}`;
+        a.href = url;
         a.target = "_blank";
         a.rel = "noopener noreferrer";
 
@@ -275,7 +283,6 @@ const createOpenButton = (elem, elem2) => {
 
       const minimizedCloseBtn = createOpenButton(minimizedDisplay, shadow);
       minimizedDisplay.appendChild(minimizedCloseBtn);
-
       document.querySelector("body").appendChild(shadow);
     });
   });
