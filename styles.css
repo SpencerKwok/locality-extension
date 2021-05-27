@@ -27,6 +27,13 @@
 }
 
 /* Images */
+.locality-img-container {
+  display: flex;
+  height: 125px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
 .locality-img {
   width: 90px;
   vertical-align: baseline;
@@ -42,28 +49,38 @@
 }
 .locality-label-name {
   font-size: 12px !important;
+  overflow-wrap: break-word;
 }
 .locality-label-price {
   font-size: 12px !important;
 }
 
 /* Link */
+.locality-link-end,
 .locality-link {
   text-decoration: none !important;
   color: #000000 !important;
+  margin-bottom: 8px !important;
 }
+.locality-link {
+  margin-right: 8px !important;
+}
+.locality-link-end:link,
 .locality-link:link {
   text-decoration: none !important;
   color: #000000 !important;
 }
+.locality-link-end:visited,
 .locality-link:visited {
   text-decoration: none !important;
   color: #000000 !important;
 }
+.locality-link-end:hover,
 .locality-link:hover {
   text-decoration: none !important;
   color: #000000 !important;
 }
+.locality-link-end:active,
 .locality-link:active {
   text-decoration: none !important;
   color: #000000 !important;
@@ -71,28 +88,24 @@
 
 /* Content */
 .locality-stack-horizontal {
+  background-color: #ffffff;
   margin-block-start: 12px !important;
   margin-block-end: 12px !important;
-  margin: 10px 0px 0px 0px !important;
+  margin: 12px !important;
+  padding: 8px !important;
   max-width: 100%;
+  max-height: 380px;
   justify-content: center;
   display: flex;
   flex-direction: row;
-}
-.locality-stack-horizontal > .locality-link {
-  margin-right: 10px;
-}
-.locality-stack-horizontal > .locality-link:last-child {
-  margin-right: 0px;
+  flex-flow: row wrap;
+  overflow-y: auto;
 }
 .locality-stack-vertical,
 .locality-stack-vertical-link {
   align-items: center;
   display: flex;
   flex-direction: column;
-}
-.locality-stack-vertical {
-  margin-top: -10px !important;
 }
 
 /* Shadow */
@@ -126,7 +139,7 @@
   position: fixed;
   right: 20px;
   top: 60px;
-  width: 322px;
+  width: 350px;
   z-index: 2147483647 !important;
 }
 .locality-window > div {
@@ -135,20 +148,22 @@
 
 /* Logo */
 .locality-logo {
-  width: 400px !important;
-  margin: -10px 0px 0px 0px !important;
+  height: 80px !important;
+  width: 200px !important;
+  margin-top: 20px !important;
 }
 
 /* Intro */
 .locality-intro {
   color: #000000;
   display: flex;
-  font-size: 14px !important;
+  font-size: 16px !important;
   font-weight: normal !important;
   line-height: normal !important;
-  margin: -30px 0px 0px 0px !important;
+  margin: 0px !important;
   max-width: 100%;
   padding-bottom: 0px;
+  text-align: center;
   width: 290px;
 }
 

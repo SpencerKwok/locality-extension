@@ -1,8 +1,8 @@
 {
-  "name": " Locality",
-  "version": "0.0.0.1",
+  "name": " Locality - Local Shopping Made Easy",
+  "version": "0.0.0.4",
   "manifest_version": 3,
-  "description": "Instantly find products from locally owned small businesses in your area without changing your search habits!",
+  "description": "Instantly find products from locally owned small businesses in BC without changing your search habits! Shopping locally made simple.",
   "content_scripts": [
     {
       "js": ["init.js"],
@@ -10,19 +10,21 @@
       "matches": [
         "*://www.amazon.ca/s*",
         "*://www.amazon.com/s*",
+        "*://www.etsy.com/search*",
         "*://www.etsy.com/ca/search*",
+        "*://www.walmart.ca/browse*",
         "*://www.walmart.ca/search*",
+        "*://www.walmart.com/browse*",
         "*://www.walmart.com/search*"
       ]
     }
   ],
   "content_security_policy": {
-    "extension_pages": "default-src 'self'; connect-src https://www.mylocality.shop https://api.ipify.org; img-src img-src: https://res.cloudinary.com"
+    "extension_pages": "default-src 'self'; connect-src https://www.mylocality.shop;img-src: https://res.cloudinary.com https://i.etsystatic.com https://images.squarespace-cdn.com https://cdn.shopify.com"
   },
   "icons": {
     "16": "/icons/locality16.png",
     "48": "/icons/locality48.png",
     "128": "/icons/locality128.png"
-  },
-  "permissions": ["geolocation"]
+  }
 }
