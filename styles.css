@@ -40,12 +40,16 @@
 }
 
 /* Label */
+.locality-label-business,
 .locality-label-name,
 .locality-label-price {
   line-height: normal !important;
   max-width: 100%;
   margin: 0px !important;
   width: 90px;
+}
+.locality-label-business {
+  font-size: 10px !important;
 }
 .locality-label-name {
   font-size: 12px !important;

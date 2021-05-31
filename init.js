@@ -27,7 +27,7 @@ const initImageDisplay = (imgs /* img[] */) => {
       event.target.scrollHeight -
         event.target.scrollTop -
         event.target.clientHeight <
-      400
+      800
     ) {
       onBottom();
     }
@@ -56,67 +56,68 @@ const addImages = async () => {
     .then(({ hits, nbHits }) => {
       maxHits = nbHits;
       page += 1;
-      hits.forEach(({ image, link, priceRange, name }, index) => {
-        const img = document.createElement("img");
-        img.className = "locality-img";
-        img.src = image.replace("/upload", "/upload/w_400");
-        img.alt = name;
+      hits.forEach(
+        ({ business, link, priceRange, name, variantImages }, index) => {
+          const img = document.createElement("img");
+          img.className = "locality-img";
+          img.src = variantImages[0].replace("/upload", "/upload/w_200");
+          img.alt = name;
 
-        if (index <= 6) {
-          img.loading = "eager";
-        } else {
-          img.loading = "lazy";
+          const imgContainer = document.createElement("div");
+          imgContainer.className = "locality-img-container";
+          imgContainer.appendChild(img);
+
+          const priceLabel = document.createElement("h5");
+          priceLabel.className = "locality-label-price";
+          if (priceRange[0] === priceRange[1]) {
+            priceLabel.innerText = `$${priceRange[0].toFixed(2)} CAD`;
+          } else {
+            priceLabel.innerText = `$${priceRange[0].toFixed(
+              2
+            )}-${priceRange[1].toFixed(2)} CAD`;
+          }
+
+          const businessLabel = document.createElement("p");
+          businessLabel.className = "locality-label-business";
+          businessLabel.innerText = business;
+
+          const productLabel = document.createElement("p");
+          productLabel.className = "locality-label-name";
+
+          if (name.length >= 25) {
+            productLabel.innerText = `${name.substr(0, 25)}...`;
+          } else {
+            productLabel.innerText = name;
+          }
+
+          const a = document.createElement("a");
+
+          let url = "https://www.mylocality.shop/api/analytics/event";
+          url += "?name=extension_product_click";
+          url += `&page_location=${encodeURIComponent(
+            window.location.origin + window.location.pathname
+          )}`;
+          url += `&page_title=${encodeURIComponent(document.title)}`;
+          url += `&product_url=${encodeURIComponent(link)}`;
+          url += `&redirect_url=${encodeURIComponent(link)}`;
+          a.href = url;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+
+          if ((index + 1) % 3 === 0) {
+            a.className = "locality-link-end";
+          } else {
+            a.className = "locality-link";
+          }
+
+          a.appendChild(imgContainer);
+          a.appendChild(businessLabel);
+          a.appendChild(productLabel);
+          a.appendChild(priceLabel);
+
+          pageHits.push(a);
         }
-
-        const imgContainer = document.createElement("div");
-        imgContainer.className = "locality-img-container";
-        imgContainer.appendChild(img);
-
-        const priceLabel = document.createElement("h5");
-        priceLabel.className = "locality-label-price";
-        if (priceRange[0] === priceRange[1]) {
-          priceLabel.innerText = `$${priceRange[0].toFixed(2)} CAD`;
-        } else {
-          priceLabel.innerText = `$${priceRange[0].toFixed(
-            2
-          )}-${priceRange[1].toFixed(2)} CAD`;
-        }
-
-        const productLabel = document.createElement("p");
-        productLabel.className = "locality-label-name";
-
-        if (name.length >= 25) {
-          productLabel.innerText = `${name.substr(0, 25)}...`;
-        } else {
-          productLabel.innerText = name;
-        }
-
-        const a = document.createElement("a");
-
-        let url = "https://www.mylocality.shop/api/analytics/event";
-        url += "?name=extension_product_click";
-        url += `&page_location=${encodeURIComponent(
-          window.location.origin + window.location.pathname
-        )}`;
-        url += `&page_title=${encodeURIComponent(document.title)}`;
-        url += `&product_url=${encodeURIComponent(link)}`;
-        url += `&redirect_url=${encodeURIComponent(link)}`;
-        a.href = url;
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
-
-        if ((index + 1) % 3 === 0) {
-          a.className = "locality-link-end";
-        } else {
-          a.className = "locality-link";
-        }
-
-        a.appendChild(imgContainer);
-        a.appendChild(productLabel);
-        a.appendChild(priceLabel);
-
-        pageHits.push(a);
-      });
+      );
     })
     .catch((err) => console.log(err));
   return pageHits;
