@@ -57,10 +57,16 @@ const addImages = async () => {
       maxHits = nbHits;
       page += 1;
       hits.forEach(
-        ({ business, link, priceRange, name, variantImages }, index) => {
+        (
+          { business, link, priceRange, name, variantImages, variantIndex },
+          index
+        ) => {
           const img = document.createElement("img");
           img.className = "locality-img";
-          img.src = variantImages[0].replace("/upload", "/upload/w_200");
+          img.src = variantImages[variantIndex].replace(
+            "/upload",
+            "/upload/w_200"
+          );
           img.alt = name;
 
           const imgContainer = document.createElement("div");
