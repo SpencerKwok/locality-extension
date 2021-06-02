@@ -99,12 +99,11 @@ const addImages = async () => {
           const a = document.createElement("a");
 
           let url = "https://www.mylocality.shop/api/analytics/event";
-          url += "?name=extension_product_click";
+          url += `?name=extension_product_click_${encodeURIComponent(link)}`;
           url += `&page_location=${encodeURIComponent(
             window.location.origin + window.location.pathname
           )}`;
           url += `&page_title=${encodeURIComponent(document.title)}`;
-          url += `&product_url=${encodeURIComponent(link)}`;
           url += `&redirect_url=${encodeURIComponent(link)}`;
           a.href = url;
           a.target = "_blank";

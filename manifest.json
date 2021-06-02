@@ -1,6 +1,6 @@
 {
   "name": " Locality - Local Shopping Made Easy",
-  "version": "0.0.0.6",
+  "version": "0.0.0.7",
   "manifest_version": 3,
   "description": "Instantly find products from locally owned small businesses in BC without changing your search habits! Shopping locally made simple.",
   "content_scripts": [
