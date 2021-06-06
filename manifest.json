@@ -1,8 +1,13 @@
 {
-  "name": " Locality - Local Shopping Made Easy",
-  "version": "0.0.0.7",
+  "name": "Locality - Local Shopping Made Easy",
+  "version": "0.0.0.8",
   "manifest_version": 3,
   "description": "Instantly find products from locally owned small businesses in BC without changing your search habits! Shopping locally made simple.",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Locality - Local Shopping Made Easy",
+    "default_icon": "/icons/locality128.png"
+  },
   "content_scripts": [
     {
       "js": ["init.js"],
