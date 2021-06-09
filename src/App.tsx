@@ -224,7 +224,7 @@ const App: FC<{}> = () => {
                             id: id.toString(),
                             token: token,
                           },
-                        });
+                        }).catch((err) => console.log(err));
                       }
                       // @ts-ignore
                       chrome.runtime.sendMessage({ message: "clear" });

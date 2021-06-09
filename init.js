@@ -100,7 +100,7 @@ const addImages = async () => {
 
           const a = document.createElement("a");
 
-          let url = "https://www.mylocality.shop/api/analytics/event";
+          let url = "https://www.mylocality.shop/api/extension/analytics/event";
           url += `?name=extension_product_click_${encodeURIComponent(link)}`;
           url += `&page_location=${encodeURIComponent(
             window.location.origin + window.location.pathname
@@ -321,12 +321,13 @@ const unload = () => {
 };
 
 (async function () {
-  chrome.runtime.sendMessage({ message: "get", key: "id" }, (result) => {
-    id = result || -1;
-  });
-  chrome.runtime.sendMessage({ message: "get", key: "token" }, (result) => {
-    token = result || "";
-  });
+  chrome.runtime.sendMessage(
+    { message: "get", keys: ["id", "token"] },
+    (result) => {
+      id = result[0] || -1;
+      token = result[1] || "";
+    }
+  );
 
   window.addEventListener("load", load);
   window.addEventListener("unload", unload);
