@@ -24,9 +24,14 @@
       ]
     }
   ],
-  "content_security_policy": {
-    "extension_pages": "default-src 'self'; connect-src https://www.mylocality.shop;img-src: https://res.cloudinary.com https://i.etsystatic.com https://images.squarespace-cdn.com https://cdn.shopify.com"
+  "background": {
+    "service_worker": "sw.js"
   },
+  "content_security_policy": {
+    "popup": "default-src 'self'",
+    "extension_pages": "default-src 'self'; script-src 'self'; connect-src http://localhost:3000 https://locality-ui-dev.herokuapp.com https://www.mylocality.shop; img-src https://res.cloudinary.com https://i.etsystatic.com https://images.squarespace-cdn.com https://cdn.shopify.com"
+  },
+  "permissions": ["storage"],
   "icons": {
     "16": "/icons/locality16.png",
     "48": "/icons/locality48.png",

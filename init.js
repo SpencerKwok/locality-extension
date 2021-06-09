@@ -1,3 +1,5 @@
+let id = -1;
+let token = "";
 let imageDisplay = null;
 let loading = false;
 let page = 0;
@@ -243,53 +245,89 @@ const createOpenButton = (elem, elem2) => {
   return open;
 };
 
-(async function () {
-  window.addEventListener("load", async function () {
-    const minimizedDisplay = dragElement(
-      document.createElement("div"),
-      (fixHorizontal = true)
-    );
-    minimizedDisplay.className = "locality-minimized";
+const handler = (request) => {
+  switch (request.message) {
+    case "set":
+      break;
+    case "get":
+      switch (request.key) {
+        case "id":
+          console.log(request.value);
+          break;
+        case "token":
+          console.log(request.value);
+          break;
+        default:
+          break;
+      }
+      break;
+    default:
+      break;
+  }
+};
 
-    const display = dragElement(document.createElement("div"));
-    display.className = "locality-window";
+const load = async () => {
+  const minimizedDisplay = dragElement(
+    document.createElement("div"),
+    (fixHorizontal = true)
+  );
+  minimizedDisplay.className = "locality-minimized";
 
-    initQuery();
-    if (query.length < 3) {
-      // Query is not long enough, don't show the popup
+  const display = dragElement(document.createElement("div"));
+  display.className = "locality-window";
+
+  initQuery();
+  if (query.length < 3) {
+    // Query is not long enough, don't show the popup
+    return;
+  }
+
+  await addImages().then((images) => {
+    if (images.length <= 0) {
+      // No results, don't show the popup
       return;
     }
 
-    await addImages().then((images) => {
-      if (images.length <= 0) {
-        // No results, don't show the popup
-        return;
-      }
+    initImageDisplay(images);
 
-      initImageDisplay(images);
+    const checkItOut = createCheckItOutButton();
+    const intro = createIntro();
+    const logo = createLogo();
 
-      const checkItOut = createCheckItOutButton();
-      const intro = createIntro();
-      const logo = createLogo();
+    const content = document.createElement("div");
+    content.className = "locality-stack-vertical";
+    content.appendChild(logo);
+    content.appendChild(intro);
+    content.appendChild(imageDisplay);
+    content.appendChild(checkItOut);
 
-      const content = document.createElement("div");
-      content.className = "locality-stack-vertical";
-      content.appendChild(logo);
-      content.appendChild(intro);
-      content.appendChild(imageDisplay);
-      content.appendChild(checkItOut);
+    const shadow = document.createElement("div");
+    shadow.className = "locality-shadow";
 
-      const shadow = document.createElement("div");
-      shadow.className = "locality-shadow";
+    const closeBtn = createCloseButton(shadow, minimizedDisplay);
+    display.appendChild(content);
+    display.appendChild(closeBtn);
+    shadow.appendChild(display);
 
-      const closeBtn = createCloseButton(shadow, minimizedDisplay);
-      display.appendChild(content);
-      display.appendChild(closeBtn);
-      shadow.appendChild(display);
-
-      const minimizedCloseBtn = createOpenButton(minimizedDisplay, shadow);
-      minimizedDisplay.appendChild(minimizedCloseBtn);
-      document.querySelector("body").appendChild(shadow);
-    });
+    const minimizedCloseBtn = createOpenButton(minimizedDisplay, shadow);
+    minimizedDisplay.appendChild(minimizedCloseBtn);
+    document.querySelector("body").appendChild(shadow);
   });
+};
+
+const unload = () => {
+  window.removeEventListener("load", load);
+  window.removeEventListener("unload", unload);
+};
+
+(async function () {
+  chrome.runtime.sendMessage({ message: "get", key: "id" }, (result) => {
+    id = result || -1;
+  });
+  chrome.runtime.sendMessage({ message: "get", key: "token" }, (result) => {
+    token = result || "";
+  });
+
+  window.addEventListener("load", load);
+  window.addEventListener("unload", unload);
 })();
