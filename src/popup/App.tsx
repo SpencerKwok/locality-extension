@@ -7,21 +7,20 @@ import FormControl from "react-bootstrap/FormControl";
 import { Formik } from "formik";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import LocalityLogo from "../common/images/LocalityLogo";
-import { ErrorMessage, InputGroup, Label, SubmitButton } from "../common/form";
-import Stack from "../common/Stack";
+import { GetRpcClient, PostRpcClient } from "../components/common/RpcClient";
+import LocalityLogo from "../components/common/images/LocalityLogo";
+import {
+  ErrorMessage,
+  InputGroup,
+  Label,
+  SubmitButton,
+} from "../components/common/form";
+import Stack from "../components/common/Stack";
 import "./App.css";
 
 import type { FC } from "react";
 import type { FormikConfig } from "formik";
-
-interface Product {
-  name: string;
-  business: string;
-  link: string;
-  variantIndex: number;
-  variantImages: Array<string>;
-}
+import type { Product } from "../components/common/Schema";
 
 const SignInSchema = yup.object().shape({
   email: yup
@@ -73,74 +72,43 @@ const App: FC<{}> = () => {
   const [wishlist, setWishlist] = useState<Array<Product>>([]);
 
   useEffect(() => {
-    // @ts-ignore
     chrome.runtime.sendMessage(
       { message: "get", keys: ["id", "token"] },
       async (values: any) => {
         const [id, token] = values;
         if (typeof id === "number" && typeof token === "string") {
-          await fetch(`${process.env.REACT_APP_BASE_API_URL}/wishlist/get`, {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              id: id.toString(),
-              token: token,
-            },
-          })
-            .then((res) => res.json())
-            .then((data: { products: Array<Product> }) => {
-              setWishlist(data.products);
+          await GetRpcClient.getInstance()
+            .call("WishList", "/wishlist/get", { id, token })
+            .then(({ products }) => {
+              setWishlist(products);
             });
-
           setPage("wishlist");
         }
-
         setLoaded(true);
       }
     );
   }, []);
 
   const SignIn: FormikConfig<SignInRequest>["onSubmit"] = async (values) => {
-    await fetch(`${process.env.REACT_APP_BASE_API_URL}/signin/credentials`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: values.email,
-        password: values.password,
-      }),
-    })
-      .then((res) => res.json())
+    await PostRpcClient.getInstance()
+      .call("SignIn", values)
       .then(async ({ error, id, token }) => {
         if (error) {
           setError(error);
           return;
         }
 
-        // @ts-ignore
         chrome.runtime.sendMessage({ message: "set", key: "id", value: id });
-        // @ts-ignore
         chrome.runtime.sendMessage({
           message: "set",
           key: "token",
           value: token,
         });
 
-        await fetch(`${process.env.REACT_APP_BASE_API_URL}/wishlist/get`, {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            id: id.toString(),
-            token: token,
-          },
-        })
-          .then((res) => res.json())
-          .then((data: { products: Array<Product> }) => {
-            setWishlist(data.products);
+        await GetRpcClient.getInstance()
+          .call("WishList", "/wishlist/get", { id, token })
+          .then(({ products }) => {
+            setWishlist(products);
             setPage("wishlist");
           });
       })
@@ -150,29 +118,15 @@ const App: FC<{}> = () => {
   };
 
   const SignUp: FormikConfig<SignUpRequest>["onSubmit"] = async (values) => {
-    await fetch(`${process.env.REACT_APP_BASE_API_URL}/signup/user`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        password: values.password1,
-      }),
-    })
-      .then((res) => res.json())
+    await PostRpcClient.getInstance()
+      .call("SignUp", { ...values, password: values.password1 })
       .then(({ error, id, token }) => {
         if (error) {
           setError(error);
           return;
         }
 
-        // @ts-ignore
         chrome.runtime.sendMessage({ message: "set", key: "id", value: id });
-        // @ts-ignore
         chrome.runtime.sendMessage({
           message: "set",
           key: "token",
@@ -184,6 +138,23 @@ const App: FC<{}> = () => {
       .catch((error) => {
         setError(error);
       });
+  };
+
+  const SignOut = () => {
+    chrome.runtime.sendMessage(
+      { message: "get", keys: ["id", "token"] },
+      (values: any) => {
+        const [id, token] = values;
+        if (typeof id === "number" && typeof token === "string") {
+          GetRpcClient.getInstance()
+            .call("SignOut", "/signout", { id, token })
+            .catch((err) => console.log(err));
+        }
+        chrome.runtime.sendMessage({ message: "clear" });
+        setWishlist([]);
+        setPage("signin");
+      }
+    );
   };
 
   if (!loaded) {
@@ -209,30 +180,7 @@ const App: FC<{}> = () => {
               <Button
                 variant="secondary"
                 style={{ margin: 8, padding: "4px 8px" }}
-                onClick={() => {
-                  // @ts-ignore
-                  chrome.runtime.sendMessage(
-                    { message: "get", keys: ["id", "token"] },
-                    async (values: any) => {
-                      const [id, token] = values;
-                      if (typeof id === "number" && typeof token === "string") {
-                        fetch(`${process.env.REACT_APP_BASE_API_URL}/signout`, {
-                          method: "GET",
-                          headers: {
-                            Accept: "application/json",
-                            "Content-Type": "application/json",
-                            id: id.toString(),
-                            token: token,
-                          },
-                        }).catch((err) => console.log(err));
-                      }
-                      // @ts-ignore
-                      chrome.runtime.sendMessage({ message: "clear" });
-                      setWishlist([]);
-                      setPage("signin");
-                    }
-                  );
-                }}
+                onClick={SignOut}
               >
                 Sign out
               </Button>
