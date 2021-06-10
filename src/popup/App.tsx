@@ -7,9 +7,9 @@ import FormControl from "react-bootstrap/FormControl";
 import { Formik } from "formik";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import LocalityLogo from "./common/images/LocalityLogo";
-import { ErrorMessage, InputGroup, Label, SubmitButton } from "./common/form";
-import Stack from "./common/Stack";
+import LocalityLogo from "../common/images/LocalityLogo";
+import { ErrorMessage, InputGroup, Label, SubmitButton } from "../common/form";
+import Stack from "../common/Stack";
 import "./App.css";
 
 import type { FC } from "react";

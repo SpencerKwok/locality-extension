@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/static/css/main.5bedd642.chunk.css",
-    "main.js": "/static/js/main.db0fe640.chunk.js",
-    "main.js.map": "/static/js/main.db0fe640.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.63c4fe88.js",
-    "runtime-main.js.map": "/static/js/runtime-main.63c4fe88.js.map",
-    "static/css/2.669e2d12.chunk.css": "/static/css/2.669e2d12.chunk.css",
-    "static/js/2.505987e5.chunk.js": "/static/js/2.505987e5.chunk.js",
-    "static/js/2.505987e5.chunk.js.map": "/static/js/2.505987e5.chunk.js.map",
+    "main.css": "/static/css/popup.main.bd4bfe8b.chunk.css",
+    "main.js": "/static/js/popup.main.5130f4f7.chunk.js",
+    "main.js.map": "/static/js/popup.main.5130f4f7.chunk.js.map",
+    "runtime-main.js": "/static/js/popup.runtime-main.63c4fe88.js",
+    "runtime-main.js.map": "/static/js/popup.runtime-main.63c4fe88.js.map",
+    "static/css/popup.2.669e2d12.chunk.css": "/static/css/popup.2.669e2d12.chunk.css",
+    "static/js/popup.2.505987e5.chunk.js": "/static/js/popup.2.505987e5.chunk.js",
+    "static/js/popup.2.505987e5.chunk.js.map": "/static/js/popup.2.505987e5.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/2.669e2d12.chunk.css.map": "/static/css/2.669e2d12.chunk.css.map",
-    "static/css/main.5bedd642.chunk.css.map": "/static/css/main.5bedd642.chunk.css.map",
-    "static/js/2.505987e5.chunk.js.LICENSE.txt": "/static/js/2.505987e5.chunk.js.LICENSE.txt"
+    "static/css/popup.2.669e2d12.chunk.css.map": "/static/css/popup.2.669e2d12.chunk.css.map",
+    "static/css/popup.main.bd4bfe8b.chunk.css.map": "/static/css/popup.main.bd4bfe8b.chunk.css.map",
+    "static/js/popup.2.505987e5.chunk.js.LICENSE.txt": "/static/js/popup.2.505987e5.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.63c4fe88.js",
-    "static/css/2.669e2d12.chunk.css",
-    "static/js/2.505987e5.chunk.js",
-    "static/css/main.5bedd642.chunk.css",
-    "static/js/main.db0fe640.chunk.js"
+    "static/js/popup.runtime-main.63c4fe88.js",
+    "static/css/popup.2.669e2d12.chunk.css",
+    "static/js/popup.2.505987e5.chunk.js",
+    "static/css/popup.main.bd4bfe8b.chunk.css",
+    "static/js/popup.main.5130f4f7.chunk.js"
   ]
 }
