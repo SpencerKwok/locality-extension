@@ -4,7 +4,7 @@ let page = 0;
 let query = "";
 let maxHits = 0;
 
-const BASE_URL = "https://locality-ui-dev.herokuapp.com"; //"https://www.mylocality.shop";
+const BASE_URL = "https://www.mylocality.shop";
 
 // Images
 const HEART =
@@ -112,9 +112,6 @@ const addImages = async () => {
           const imgContainer = document.createElement("div");
           imgContainer.className = "locality-img-container";
           imgContainer.appendChild(img);
-          if (wishlist) {
-            imgContainer.appendChild(createHeart());
-          }
 
           const priceLabel = document.createElement("h5");
           priceLabel.className = "locality-label-price";
@@ -178,12 +175,6 @@ const createIntro = () => {
   intro.style =
     "width: max-content; max-width: 90%; overflow-wrap: break-word;";
   return intro;
-};
-
-const createHeart = () => {
-  const heart = document.createElement("div");
-  heart.innerHTML = HEART;
-  return heart;
 };
 
 const createLogo = () => {

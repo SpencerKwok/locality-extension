@@ -3,6 +3,7 @@ export interface BaseResponse {
 }
 
 export interface Product {
+  objectId: string;
   name: string;
   business: string;
   link: string;
@@ -13,6 +14,14 @@ export interface Product {
 }
 
 export interface PostMethods {
+  AddToWishList: {
+    request: AddToWishListRequest;
+    response: AddToWishListResponse;
+  };
+  DeleteFromWishList: {
+    request: DeleteFromWishListRequest;
+    response: DeleteFromWishListResponse;
+  };
   SignIn: {
     request: SignInRequest;
     response: SignInResponse;
@@ -22,6 +31,18 @@ export interface PostMethods {
     response: SignUpResponse;
   };
 }
+
+export interface AddToWishListRequest {
+  id: string;
+}
+
+export interface AddToWishListResponse extends BaseResponse {}
+
+export interface DeleteFromWishListRequest {
+  id: string;
+}
+
+export interface DeleteFromWishListResponse extends BaseResponse {}
 
 export interface SignInRequest {
   email: string;

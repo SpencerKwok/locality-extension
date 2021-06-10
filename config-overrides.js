@@ -40,7 +40,6 @@ module.exports = {
       "index.js",
       `${process.env.BUILD_NAME}.tsx`
     );
-    console.log(paths);
     return paths;
   },
 };

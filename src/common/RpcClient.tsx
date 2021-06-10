@@ -1,7 +1,12 @@
 import { PostMethods, GetMethods } from "./Schema";
 
 const baseUrl = process.env.REACT_APP_BASE_API_URL;
-const endpoints = new Map<keyof PostMethods, string>([]);
+const endpoints = new Map<keyof PostMethods, string>([
+  ["AddToWishList", "/wishlist/add"],
+  ["DeleteFromWishList", "/wishlist/delete"],
+  ["SignIn", "/signin/credentials"],
+  ["SignUp", "/signup/user"],
+]);
 
 let postRpcClient: PostRpcClient;
 export class PostRpcClient {
@@ -27,10 +32,8 @@ export class PostRpcClient {
     const endpoint = endpoints.get(method);
     const fetchRequest = new Request(`${baseUrl}${endpoint}`, {
       method: "POST",
-      credentials: "same-origin",
       headers: {
         "content-type": "application/json",
-        charset: "utf-8",
         ...auth,
       },
       body: JSON.stringify(request),
@@ -75,11 +78,9 @@ export class GetRpcClient {
       ? { id: credentials.id.toString(), token: credentials.token }
       : {};
     const fetchRequest = new Request(`${baseUrl}${endpoint}`, {
-      credentials: "same-origin",
       method: "GET",
       headers: {
         "content-type": "application/json",
-        charset: "utf-8",
         ...auth,
       },
     });
