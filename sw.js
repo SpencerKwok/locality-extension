@@ -1,8 +1,3 @@
-// Unfortunately, this storage is destroyed after the popup
-// disappears and it an in-memory storage isn't currently
-// possible in MV3 as seen here:
-// https://developer.chrome.com/docs/extensions/mv3/intro/mv3-overview/
-
 let storageCache = {};
 const initStorageCache = getAllStorageSyncData().then((items) => {
   Object.assign(storageCache, items);

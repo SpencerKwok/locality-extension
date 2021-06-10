@@ -1,6 +1,6 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
+  "name": "locality",
+  "version": "0.0.0.8",
   "private": true,
   "dependencies": {
     "bootstrap": "^5.0.1",
