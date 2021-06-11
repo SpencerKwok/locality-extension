@@ -1,18 +1,21 @@
-.h4 {
-  font-size: 12px;
-  margin: 0px;
-  word-wrap: break-word;
-  width: 75px;
-}
-.h5 {
-  font-size: 12px;
-  margin: 0px;
-  word-wrap: break-word;
-  width: 75px;
-}
-.h6 {
+.name {
   font-size: 10px;
+  margin: 0px;
+  text-align: left;
+  word-wrap: break-word;
+  width: 75px;
+}
+.price {
+  font-size: 10px;
+  margin: 0px;
+  text-align: left;
+  word-wrap: break-word;
+  width: 75px;
+}
+.business {
+  font-size: 8px;
   margin: 4px 0px 0px 0px;
+  text-align: left;
   word-wrap: break-word;
   width: 75px;
 }
@@ -20,7 +23,7 @@
 .picture {
   align-items: center;
   display: flex;
-  height: 125px;
+  height: 100px;
   justify-content: center;
   overflow: hidden;
 }

@@ -67,8 +67,17 @@ export interface SignUpResponse extends BaseResponse {
 }
 
 export interface GetMethods {
+  Search: SearchResponse;
   SignOut: SignOutResponse;
   WishList: WishListResponse;
+}
+export interface SearchResponse extends BaseResponse {
+  facets: {
+    business: { [key: string]: number };
+    departments: { [key: string]: number };
+  };
+  hits: Array<Product>;
+  nbHits: number;
 }
 
 export interface SignOutResponse extends BaseResponse {}

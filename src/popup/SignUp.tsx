@@ -56,7 +56,7 @@ const SignUp: FC<SignUpProps> = ({ error, onSignIn, onSignUp }) => {
           spacing={6}
           style={{ marginTop: 20, marginBottom: 20 }}
         >
-          <LocalityLogo height={80} width={200} />
+          <LocalityLogo height={60} width={200} />
           <Formik
             initialValues={
               {

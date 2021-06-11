@@ -19,6 +19,7 @@ export default function WishlistToolTip({
         marginLeft: 8,
         padding: 0,
         width: 120,
+        zIndex: 2147483647,
       }}
       position={["right center", "left center"]}
       on={["hover"]}

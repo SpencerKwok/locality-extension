@@ -77,6 +77,7 @@ export class GetRpcClient {
     const auth: { [key: string]: string } = credentials
       ? { id: credentials.id.toString(), token: credentials.token }
       : {};
+
     const fetchRequest = new Request(`${baseUrl}${endpoint}`, {
       method: "GET",
       headers: {

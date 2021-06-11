@@ -5,6 +5,7 @@ import { GetRpcClient, PostRpcClient } from "../common/RpcClient";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import Wishlist from "./Wishlist";
+import Stack from "../common/Stack";
 import "./App.css";
 
 import type { FC } from "react";
@@ -19,24 +20,30 @@ const App: FC<{}> = () => {
   const [loaded, setLoaded] = useState(false);
   const [page, setPage] = useState("");
   const [wishlist, setWishlist] = useState<Array<Product>>([]);
+  const params = new URLSearchParams(window.location.search);
+  const install = params.get("install");
 
   useEffect(() => {
-    chrome.runtime.sendMessage(
-      { message: "get", keys: ["id", "token"] },
-      async (values: any) => {
-        const [id, token] = values;
-        if (typeof id === "number" && typeof token === "string") {
-          await GetRpcClient.getInstance()
-            .call("WishList", "/wishlist/get", { id, token })
-            .then(({ products }) => {
-              setWishlist(products);
-            });
-          setAuth({ id, token });
-          setPage("wishlist");
+    if (!install) {
+      chrome.runtime.sendMessage(
+        { message: "get", keys: ["id", "token"] },
+        async (values: any) => {
+          const [id, token] = values;
+          if (typeof id === "number" && typeof token === "string") {
+            await GetRpcClient.getInstance()
+              .call("WishList", "/wishlist/get", { id, token })
+              .then(({ products }) => {
+                setWishlist(products);
+              });
+            setAuth({ id, token });
+            setPage("wishlist");
+          }
+          setLoaded(true);
         }
-        setLoaded(true);
-      }
-    );
+      );
+    } else {
+      setLoaded(true);
+    }
   }, []);
 
   const onSignIn: FormikConfig<SignInRequest>["onSubmit"] = async (values) => {
@@ -120,9 +127,7 @@ const App: FC<{}> = () => {
     }
     return PostRpcClient.getInstance().call(
       "DeleteFromWishList",
-      {
-        id: objectId,
-      },
+      { id: objectId },
       auth
     );
   };
@@ -139,6 +144,23 @@ const App: FC<{}> = () => {
 
   switch (page) {
     case "wishlist":
+      if (install) {
+        window.resizeTo(320, 420);
+        return (
+          <Stack
+            direction="column"
+            columnAlign="center"
+            rowAlign="center"
+            style={{ height: window.innerHeight }}
+          >
+            <div
+              style={{ width: window.innerWidth * 0.8, textAlign: "center" }}
+            >
+              Set up complete! You can now close this window
+            </div>
+          </Stack>
+        );
+      }
       return (
         <Wishlist
           wishlist={wishlist}
@@ -147,6 +169,9 @@ const App: FC<{}> = () => {
         />
       );
     case "signup":
+      if (install) {
+        window.resizeTo(320, 600);
+      }
       return (
         <SignUp
           error={error}
@@ -155,8 +180,12 @@ const App: FC<{}> = () => {
         />
       );
     default:
+      if (install) {
+        window.resizeTo(320, 420);
+      }
       return (
         <SignIn
+          install={!!install}
           error={error}
           onSignIn={onSignIn}
           onSignUp={() => setPage("signup")}

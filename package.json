@@ -1,10 +1,12 @@
 {
   "name": "locality",
-  "version": "0.0.0.8",
+  "version": "0.0.0.11",
   "private": true,
   "dependencies": {
     "bootstrap": "^5.0.1",
     "formik": "^2.2.9",
+    "preact": "^8.5.3",
+    "preact-compat": "^3.19.0",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
     "react-dom": "^17.0.2",
@@ -14,12 +16,20 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build-popup": "set \"BUILD_NAME=popup\" && react-app-rewired build && cp -a build/. . && rm -r ./build"
+    "build": "npm run build-popup && npm run build-injection",
+    "build-popup": "set \"BUILD_NAME=popup\" && react-app-rewired build && rm build/injection.html && cp -a build/. . && rm -r ./build && rm popup.html && mv index.html popup.html",
+    "build-injection": "set \"BUILD_NAME=injection\" && react-app-rewired build && rm build/popup.html && cp -a build/. . && rm -r ./build && rm injection.html && mv index.html injection.html"
   },
   "eslintConfig": {
     "extends": [
       "react-app"
     ]
+  },
+  "aliasify": {
+    "aliases": {
+      "react": "preact-compat",
+      "react-dom": "preact-compat"
+    }
   },
   "browserslist": {
     "production": [
@@ -37,6 +47,7 @@
     "@types/chrome": "^0.0.145",
     "@types/react": "^17.0.9",
     "@types/react-dom": "^17.0.6",
+    "aliasify": "^2.1.0",
     "react-app-rewired": "^2.1.8"
   }
 }

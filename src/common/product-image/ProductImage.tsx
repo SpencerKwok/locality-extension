@@ -44,7 +44,7 @@ const ProductImage: FC<ProductImageProps> = ({
     <div className={className} key={objectId}>
       {!loggedIn && (hover || alwaysHover) && (
         <Stack direction="row-reverse" style={{ marginRight: 20 }}>
-          <div style={{ position: "absolute", marginTop: 16 }}>
+          <div style={{ position: "absolute", marginTop: 3 }}>
             <WishlistToolTip
               onMouseEnter={() => {
                 setHover(true);
@@ -58,7 +58,7 @@ const ProductImage: FC<ProductImageProps> = ({
       )}
       {loggedIn && (hover || alwaysHover) && !wishlist && (
         <Stack direction="row-reverse" style={{ marginRight: 20 }}>
-          <div style={{ position: "absolute", marginTop: 16 }}>
+          <div style={{ position: "absolute", marginTop: 3 }}>
             <Heart
               className={styles["heart"]}
               onMouseEnter={() => {
@@ -74,7 +74,7 @@ const ProductImage: FC<ProductImageProps> = ({
       )}
       {loggedIn && wishlist && (
         <Stack direction="row-reverse" style={{ marginRight: 20 }}>
-          <div style={{ position: "absolute", marginTop: 16 }}>
+          <div style={{ position: "absolute", marginTop: 3 }}>
             <HeartFilled
               className={styles["heart-filled"]}
               onMouseEnter={() => {
@@ -118,14 +118,14 @@ const ProductImage: FC<ProductImageProps> = ({
               width={75}
             />
           </picture>
-          <h6 className={styles.h6}>{business}</h6>
-          <h4 className={styles.h4}>{name}</h4>
+          <div className={styles.business}>{business}</div>
+          <div className={styles.name}>{name}</div>
           {priceRange[0] === priceRange[1] ? (
-            <h5 className={styles.h5}>${priceRange[0].toFixed(2)} CAD</h5>
+            <div className={styles.price}>${priceRange[0].toFixed(2)} CAD</div>
           ) : (
-            <h5 className={styles.h5}>
+            <div className={styles.price}>
               ${priceRange[0].toFixed(2)}-{priceRange[1].toFixed(2)} CAD
-            </h5>
+            </div>
           )}
         </Stack>
       </a>

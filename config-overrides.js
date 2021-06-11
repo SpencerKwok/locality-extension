@@ -1,11 +1,11 @@
 module.exports = {
   webpack: function (config) {
     config.output.filename = config.output.filename.replace(
-      "[name]",
+      "[name].[contenthash:8]",
       `${process.env.BUILD_NAME}.[name]`
     );
     config.output.chunkFilename = config.output.chunkFilename.replace(
-      "[name]",
+      "[name].[contenthash:8]",
       `${process.env.BUILD_NAME}.[name]`
     );
 
@@ -18,11 +18,11 @@ module.exports = {
         config.plugins[i].options = {
           ...config.plugins[i].options,
           filename: config.plugins[i].options.filename.replace(
-            "[name]",
+            "[name].[contenthash:8]",
             `${process.env.BUILD_NAME}.[name]`
           ),
           chunkFilename: config.plugins[i].options.chunkFilename.replace(
-            "[name]",
+            "[name].[contenthash:8]",
             `${process.env.BUILD_NAME}.[name]`
           ),
         };
@@ -34,7 +34,7 @@ module.exports = {
   paths: function (paths) {
     paths.appHtml = paths.appHtml.replace(
       "index.html",
-      `${process.env.BUILD_NAME}\\index.html`
+      `${process.env.BUILD_NAME}.html`
     );
     paths.appIndexJs = paths.appIndexJs.replace(
       "index.js",

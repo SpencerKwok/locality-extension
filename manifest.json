@@ -4,14 +4,21 @@
   "manifest_version": 3,
   "description": "Instantly find products from locally owned small businesses in BC without changing your search habits! Shopping locally made simple.",
   "action": {
-    "default_popup": "index.html",
+    "default_popup": "popup.html",
     "default_title": "Locality - Local Shopping Made Easy",
     "default_icon": "/icons/locality128.png"
   },
   "content_scripts": [
     {
-      "js": ["init.js"],
-      "css": ["styles.css"],
+      "js": [
+        "/static/js/injection.2.chunk.js",
+        "/static/js/injection.main.chunk.js",
+        "/static/js/injection.runtime-main.js"
+      ],
+      "css": [
+        "/static/css/injection.2.chunk.css",
+        "/static/css/injection.main.chunk.css"
+      ],
       "matches": [
         "*://www.amazon.ca/s*",
         "*://www.amazon.com/s*",

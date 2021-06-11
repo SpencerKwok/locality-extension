@@ -1,3 +1,13 @@
+chrome.runtime.onInstalled.addListener(() => {
+  chrome.windows.create({
+    type: "popup",
+    url: "popup.html?install=1",
+    height: 420,
+    width: 320,
+    focused: true,
+  });
+});
+
 let storageCache = {};
 const initStorageCache = getAllStorageSyncData().then((items) => {
   Object.assign(storageCache, items);

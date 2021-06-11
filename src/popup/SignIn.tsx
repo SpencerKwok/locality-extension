@@ -27,12 +27,13 @@ export interface SignInRequest {
 }
 
 export interface SignInProps {
+  install?: boolean;
   error: string;
   onSignIn: FormikConfig<SignInRequest>["onSubmit"];
   onSignUp: () => void;
 }
 
-const SignIn: FC<SignInProps> = ({ error, onSignIn, onSignUp }) => {
+const SignIn: FC<SignInProps> = ({ install, error, onSignIn, onSignUp }) => {
   return (
     <div style={{ width: 300 }}>
       <Stack direction="row" columnAlign="center">
@@ -41,9 +42,9 @@ const SignIn: FC<SignInProps> = ({ error, onSignIn, onSignUp }) => {
           spacing={6}
           style={{ marginTop: 20, marginBottom: 20 }}
         >
-          <LocalityLogo height={80} width={200} />
+          <LocalityLogo height={60} width={200} />
           <div style={{ margin: 0, textAlign: "center", width: 200 }}>
-            Sign in to see your wishlist!
+            Sign in to {install ? "complete set up!" : "see your wishlist!"}
           </div>
           <Formik
             initialValues={
