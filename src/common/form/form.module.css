@@ -1,0 +1,22 @@
+.button {
+  padding: 11px;
+  background-color: #449ed7 !important;
+  border-color: #449ed7 !important;
+}
+.button:active,
+.button:hover {
+  background-color: #3880ae !important;
+  border-color: #3880ae !important;
+}
+
+.input-group {
+  border: none;
+  box-shadow: none;
+  outline: none;
+  width: 100%;
+}
+
+.label:after {
+  content: " *";
+  color: red;
+}

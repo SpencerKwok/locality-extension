@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/injection.main.chunk.css",
+    "main.js": "/static/js/injection.main.chunk.js",
+    "main.js.map": "/static/js/injection.main.chunk.js.map",
+    "runtime-main.js": "/static/js/injection.runtime-main.js",
+    "runtime-main.js.map": "/static/js/injection.runtime-main.js.map",
+    "static/css/injection.2.chunk.css": "/static/css/injection.2.chunk.css",
+    "static/js/injection.2.chunk.js": "/static/js/injection.2.chunk.js",
+    "static/js/injection.2.chunk.js.map": "/static/js/injection.2.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/injection.2.chunk.css.map": "/static/css/injection.2.chunk.css.map",
+    "static/css/injection.main.chunk.css.map": "/static/css/injection.main.chunk.css.map",
+    "static/js/injection.2.chunk.js.LICENSE.txt": "/static/js/injection.2.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/injection.runtime-main.js",
+    "static/css/injection.2.chunk.css",
+    "static/js/injection.2.chunk.js",
+    "static/css/injection.main.chunk.css",
+    "static/js/injection.main.chunk.js"
+  ]
+}

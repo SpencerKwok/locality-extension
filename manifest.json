@@ -1,12 +1,24 @@
 {
-  "name": " Locality - Local Shopping Made Easy",
-  "version": "0.0.0.7",
+  "name": "Locality - Local Shopping Made Easy",
+  "version": "0.0.0.11",
   "manifest_version": 3,
   "description": "Instantly find products from locally owned small businesses in BC without changing your search habits! Shopping locally made simple.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Locality - Local Shopping Made Easy",
+    "default_icon": "/icons/locality128.png"
+  },
   "content_scripts": [
     {
-      "js": ["init.js"],
-      "css": ["styles.css"],
+      "js": [
+        "/static/js/injection.2.chunk.js",
+        "/static/js/injection.main.chunk.js",
+        "/static/js/injection.runtime-main.js"
+      ],
+      "css": [
+        "/static/css/injection.2.chunk.css",
+        "/static/css/injection.main.chunk.css"
+      ],
       "matches": [
         "*://www.amazon.ca/s*",
         "*://www.amazon.com/s*",
@@ -19,9 +31,14 @@
       ]
     }
   ],
-  "content_security_policy": {
-    "extension_pages": "default-src 'self'; connect-src https://www.mylocality.shop;img-src: https://res.cloudinary.com https://i.etsystatic.com https://images.squarespace-cdn.com https://cdn.shopify.com"
+  "background": {
+    "service_worker": "sw.js"
   },
+  "content_security_policy": {
+    "popup": "default-src 'self'",
+    "extension_pages": "default-src 'self'; script-src 'self'; connect-src https://locality-ui-dev.herokuapp.com https://www.mylocality.shop 'self'; img-src https://res.cloudinary.com https://i.etsystatic.com https://images.squarespace-cdn.com https://cdn.shopify.com"
+  },
+  "permissions": ["storage"],
   "icons": {
     "16": "/icons/locality16.png",
     "48": "/icons/locality48.png",

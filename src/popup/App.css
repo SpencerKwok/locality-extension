@@ -1,0 +1,45 @@
+/* Error */
+.locality-error {
+  color: red;
+  margin: 12px 0px 12px 0px;
+  width: 300px;
+}
+
+/* Link */
+.locality-link-end,
+.locality-link {
+  text-decoration: none;
+  color: #000000;
+  margin-bottom: 8px;
+}
+.locality-link {
+  margin-right: 8px;
+}
+.locality-link-end:link,
+.locality-link:link {
+  text-decoration: none;
+  color: #000000;
+}
+.locality-link-end:visited,
+.locality-link:visited {
+  text-decoration: none;
+  color: #000000;
+}
+.locality-link-end:hover,
+.locality-link:hover {
+  text-decoration: none;
+  color: #000000;
+}
+.locality-link-end:active,
+.locality-link:active {
+  text-decoration: none;
+  color: #000000;
+}
+
+/* Internal Link */
+.locality-internal-link {
+  cursor: pointer;
+  display: inline;
+  color: #0d6efd;
+  text-decoration: underline;
+}

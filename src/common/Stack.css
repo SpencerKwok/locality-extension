@@ -1,0 +1,12 @@
+.locality-stack-column-reverse:last-child {
+  margin-top: 0px !important;
+}
+.locality-stack-row:last-child {
+  margin-right: 0px !important;
+}
+.locality-stack-column:last-child {
+  margin-bottom: 0px !important;
+}
+.locality-stack-row-reverse:last-child {
+  margin-left: 0px !important;
+}
