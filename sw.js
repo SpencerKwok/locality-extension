@@ -1,11 +1,14 @@
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.windows.create({
-    type: "popup",
-    url: "popup.html?install=1",
-    height: 420,
-    width: 320,
-    focused: true,
-  });
+chrome.runtime.onInstalled.addListener((details) => {
+  // Only show popup on install
+  if (details.reason === "install") {
+    chrome.windows.create({
+      type: "popup",
+      url: "popup.html?install=1",
+      height: 420,
+      width: 320,
+      focused: true,
+    });
+  }
 });
 
 let storageCache = {};
