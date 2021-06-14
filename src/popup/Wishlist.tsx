@@ -71,7 +71,7 @@ const Wishlist: FC<WishlistProps> = ({
                             <div
                               key={wishlist.length}
                               style={{
-                                width: blankSlots * 90 + (blankSlots - 1) * 8,
+                                width: blankSlots * 75 + (blankSlots - 1) * 8,
                               }}
                             />
                           );

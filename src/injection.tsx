@@ -121,17 +121,18 @@ chrome.runtime.sendMessage(
           token,
         })
         .then(({ hits }) => {
-          ReactDOM.render(
-            <AppWrapper
-              id={id}
-              token={token}
-              initialHits={hits}
-              query={query}
-              onOpen={onOpen}
-              onClose={onClose}
-            />,
-            app
-          );
+          if (hits.length > 0)
+            ReactDOM.render(
+              <AppWrapper
+                id={id}
+                token={token}
+                initialHits={hits}
+                query={query}
+                onOpen={onOpen}
+                onClose={onClose}
+              />,
+              app
+            );
         });
     }
   }

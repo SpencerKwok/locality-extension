@@ -1,6 +1,6 @@
 {
   "name": "locality",
-  "version": "0.0.0.11",
+  "version": "0.0.0.13",
   "private": true,
   "dependencies": {
     "bootstrap": "^5.0.1",

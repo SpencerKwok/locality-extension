@@ -8,13 +8,12 @@ export type StackDirection =
   | "column-reverse";
 export type StackAlignment = "flex-start" | "center" | "flex-end";
 
-export interface StackProps {
+export interface StackProps extends React.HTMLProps<HTMLDivElement> {
   direction: StackDirection;
   columnAlign?: StackAlignment;
   rowAlign?: StackAlignment;
   priority?: Array<number>;
   spacing?: number;
-  style?: CSSProperties;
 }
 
 const Stack: FC<StackProps> = (props) => {
