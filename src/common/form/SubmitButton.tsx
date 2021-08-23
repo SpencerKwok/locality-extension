@@ -1,8 +1,8 @@
-import React from "react";
-import Button from "react-bootstrap/Button";
-
+import Button from "../button/Button";
+import Stack from "../Stack";
 import styles from "./form.module.css";
 
+import type { FC } from "react";
 import type { ButtonProps } from "react-bootstrap/Button";
 
 export interface FormSubmitButtonProps extends ButtonProps {
@@ -11,33 +11,43 @@ export interface FormSubmitButtonProps extends ButtonProps {
   isSubmitting: boolean;
 }
 
-export default function FormSubmitButton({
+const FormSubmitButton: FC<FormSubmitButtonProps> = ({
   text,
   submittingText,
   isSubmitting,
   disabled,
   ...rest
-}: FormSubmitButtonProps) {
+}) => {
   return (
     <Button
       {...rest}
       className={styles.button}
+      variant="dark"
       type="submit"
       disabled={isSubmitting}
     >
-      {isSubmitting && !disabled ? (
-        <React.Fragment>
+      {isSubmitting === true && disabled !== true ? (
+        <Stack direction="row" rowAlign="center" columnAlign="center">
           <span
-            className="spinner-border spinner-border-sm"
+            className={`${styles["spinner-border"]} ${styles["spinner-border-sm"]}`}
             role="status"
             aria-hidden="true"
-            style={{ marginBottom: 2, marginRight: 12 }}
+            style={{ marginRight: 12 }}
           ></span>
           {submittingText}
-        </React.Fragment>
+        </Stack>
       ) : (
-        <React.Fragment>{text}</React.Fragment>
+        <Stack
+          direction="row"
+          rowAlign="center"
+          columnAlign="center"
+          style={{ height: 18 }}
+        >
+          {text}
+        </Stack>
       )}
     </Button>
   );
-}
+};
+
+export default FormSubmitButton;

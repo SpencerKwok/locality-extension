@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { PostRpcClient } from "../common/RpcClient";
+import { GetRpcClient, PostRpcClient } from "../common/RpcClient";
 import LocalityLogo from "../common/images/LocalityLogo";
 import ProductImage from "../common/product-image/ProductImage";
 import Stack from "../common/Stack";
@@ -10,7 +10,7 @@ import type { Product } from "../common/Schema";
 import "./App.css";
 
 export interface AppProps {
-  id: number;
+  email: string;
   token: string;
   initialHits: Array<Product>;
   query: string;
@@ -21,38 +21,50 @@ export interface AppProps {
 let mouseX = -1;
 let mouseY = -1;
 const App: FC<AppProps> = ({
-  id,
+  email,
   token,
   initialHits,
   query,
   onOpen,
   onClose,
 }) => {
-  const [hits, setHits] = useState(initialHits);
+  const [results, setResults] = useState({
+    isAllHits: false,
+    loadingHits: false,
+    hits: initialHits,
+    page: 0,
+  });
   const [collapsed, setCollapsed] = useState(false);
-  const loggedIn: boolean = !!(typeof id === "number" && token);
+  const loggedIn: boolean = !!(email && token);
   const onToggleWishlist = (objectId: string, value: boolean) => {
     if (value) {
       PostRpcClient.getInstance().call(
         "AddToWishList",
         { id: objectId },
-        { id, token }
+        { email, token }
       );
     } else {
       PostRpcClient.getInstance().call(
         "DeleteFromWishList",
         { id: objectId },
-        { id, token }
+        { email, token }
       );
     }
 
-    for (let i = 0; i < hits.length; ++i) {
-      if (objectId === `${hits[i].objectId}_${hits[i].variantIndex}`) {
-        setHits([
-          ...hits.slice(0, i),
-          { ...hits[i], wishlist: value },
-          ...hits.slice(i + 1),
-        ]);
+    // TODO: Fix this one day please, linear search is pathetically slow
+    for (let i = 0; i < results.hits.length; ++i) {
+      if (
+        objectId ===
+        `${results.hits[i].objectId}_${results.hits[i].variantIndex}`
+      ) {
+        setResults({
+          ...results,
+          hits: [
+            ...results.hits.slice(0, i),
+            { ...results.hits[i], wishlist: value },
+            ...results.hits.slice(i + 1),
+          ],
+        });
         break;
       }
     }
@@ -61,7 +73,7 @@ const App: FC<AppProps> = ({
   if (collapsed) {
     return (
       <img
-        src="https://res.cloudinary.com/hcory49pf/image/upload/v1614846287/extension/locality128.png"
+        src="https://res.cloudinary.com/hcory49pf/image/upload/v1628434355/extension/locality128.png"
         alt="Locality Logo"
         width={64}
         onMouseDown={(event) => {
@@ -116,13 +128,50 @@ const App: FC<AppProps> = ({
               overflowY: "scroll",
               position: "relative",
             }}
+            onScroll={(event) => {
+              if (
+                !results.isAllHits &&
+                !results.loadingHits &&
+                event.currentTarget.scrollHeight -
+                  event.currentTarget.scrollTop -
+                  event.currentTarget.clientHeight <
+                  800
+              ) {
+                setResults({
+                  ...results,
+                  loadingHits: true,
+                });
+
+                GetRpcClient.getInstance()
+                  .call("Search", `/search?q=${query}&pg=${results.page + 1}`, {
+                    email,
+                    token,
+                  })
+                  .then(({ hits }) => {
+                    if (hits.length === 0) {
+                      setResults({
+                        ...results,
+                        isAllHits: true,
+                        loadingHits: false,
+                      });
+                    } else {
+                      setResults({
+                        ...results,
+                        loadingHits: false,
+                        hits: [...results.hits, ...hits],
+                        page: results.page + 1,
+                      });
+                    }
+                  });
+              }
+            }}
           >
-            {Array.from(Array(Math.ceil(hits.length / 3)).keys()).map(
+            {Array.from(Array(Math.ceil(results.hits.length / 3)).keys()).map(
               (index) => {
                 return (
                   <Stack direction="row" columnAlign="flex-start" spacing={8}>
                     {(() => {
-                      const results = hits
+                      const renderedResults = results.hits
                         .slice(index * 3, index * 3 + 3)
                         .map((product, index2) => {
                           if (product.name.length > 14) {
@@ -143,26 +192,26 @@ const App: FC<AppProps> = ({
                               className={`locality-link${
                                 (index2 + 1) % 3 === 0 ? "-end" : ""
                               }`}
-                              loading={index * 3 < 9 ? "eager" : "lazy"}
+                              loading={(index * 3) % 24 < 9 ? "eager" : "lazy"}
                               product={product}
                               onToggleWishList={onToggleWishlist}
                             />
                           );
                         });
 
-                      const blankSlots = (3 - (results.length % 3)) % 3;
+                      const blankSlots = (3 - (renderedResults.length % 3)) % 3;
                       if (blankSlots > 0) {
-                        results.push(
+                        renderedResults.push(
                           <div
-                            key={hits.length}
+                            key={results.hits.length}
                             style={{
-                              width: blankSlots * 90 + (blankSlots - 1) * 8,
+                              width: blankSlots * 75 + (blankSlots - 1) * 8,
                             }}
                           />
                         );
                       }
 
-                      return results;
+                      return renderedResults;
                     })()}
                   </Stack>
                 );

@@ -105,33 +105,34 @@ const AppWrapper: FC<AppProps> = (props) => {
 };
 
 chrome.runtime.sendMessage(
-  { message: "get", keys: ["id", "token"] },
+  { message: "get", keys: ["email", "token"] },
   (values: any) => {
-    const [cached_id, cached_token] = values;
+    const [cached_email, cached_token] = values;
     const possibleQueries = window.location.search.match(
       /(?<=(q|k|query|redirectQuery)=)[^&]*/g
     );
     if (possibleQueries) {
-      const id = typeof cached_id === "number" ? cached_id : -1;
+      const email = typeof cached_email === "string" ? cached_email : "";
       const token = cached_token ? cached_token : "";
       const query = decodeURIComponent(possibleQueries[0]).replace(/\+/g, " ");
       GetRpcClient.getInstance()
         .call("Search", `/search?q=${query}`, {
-          id,
+          email,
           token,
         })
         .then(({ hits }) => {
-          ReactDOM.render(
-            <AppWrapper
-              id={id}
-              token={token}
-              initialHits={hits}
-              query={query}
-              onOpen={onOpen}
-              onClose={onClose}
-            />,
-            app
-          );
+          if (hits.length > 0)
+            ReactDOM.render(
+              <AppWrapper
+                email={email}
+                token={token}
+                initialHits={hits}
+                query={query}
+                onOpen={onOpen}
+                onClose={onClose}
+              />,
+              app
+            );
         });
     }
   }
