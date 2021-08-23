@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 import { GetRpcClient, PostRpcClient } from "../common/RpcClient";
 import SignIn from "./SignIn";
@@ -15,7 +14,7 @@ import type { SignInRequest } from "./SignIn";
 import type { SignUpRequest } from "./SignUp";
 
 const App: FC<{}> = () => {
-  const [auth, setAuth] = useState({ id: -1, token: "" });
+  const [auth, setAuth] = useState({ email: "", token: "" });
   const [error, setError] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [page, setPage] = useState("");
@@ -26,16 +25,16 @@ const App: FC<{}> = () => {
   useEffect(() => {
     if (!install) {
       chrome.runtime.sendMessage(
-        { message: "get", keys: ["id", "token"] },
+        { message: "get", keys: ["email", "token"] },
         async (values: any) => {
-          const [id, token] = values;
-          if (typeof id === "number" && typeof token === "string") {
+          const [email, token] = values;
+          if (typeof email === "string" && typeof token === "string") {
             await GetRpcClient.getInstance()
-              .call("WishList", "/wishlist/get", { id, token })
+              .call("WishList", "/wishlist/get", { email, token })
               .then(({ products }) => {
                 setWishlist(products);
               });
-            setAuth({ id, token });
+            setAuth({ email, token });
             setPage("wishlist");
           }
           setLoaded(true);
@@ -44,18 +43,22 @@ const App: FC<{}> = () => {
     } else {
       setLoaded(true);
     }
-  }, []);
+  }, [install]);
 
   const onSignIn: FormikConfig<SignInRequest>["onSubmit"] = async (values) => {
     await PostRpcClient.getInstance()
       .call("SignIn", values)
-      .then(async ({ error, id, token }) => {
+      .then(async ({ error, email, token }) => {
         if (error) {
           setError(error);
           return;
         }
 
-        chrome.runtime.sendMessage({ message: "set", key: "id", value: id });
+        chrome.runtime.sendMessage({
+          message: "set",
+          key: "email",
+          value: email,
+        });
         chrome.runtime.sendMessage({
           message: "set",
           key: "token",
@@ -63,10 +66,10 @@ const App: FC<{}> = () => {
         });
 
         await GetRpcClient.getInstance()
-          .call("WishList", "/wishlist/get", { id, token })
+          .call("WishList", "/wishlist/get", { email, token })
           .then(({ products }) => {
             setWishlist(products);
-            setAuth({ id, token });
+            setAuth({ email, token });
             setPage("wishlist");
           });
       })
@@ -78,20 +81,24 @@ const App: FC<{}> = () => {
   const onSignUp: FormikConfig<SignUpRequest>["onSubmit"] = async (values) => {
     await PostRpcClient.getInstance()
       .call("SignUp", { ...values, password: values.password1 })
-      .then(({ error, id, token }) => {
+      .then(({ error, email, token }) => {
         if (error) {
           setError(error);
           return;
         }
 
-        chrome.runtime.sendMessage({ message: "set", key: "id", value: id });
+        chrome.runtime.sendMessage({
+          message: "set",
+          key: "email",
+          value: email,
+        });
         chrome.runtime.sendMessage({
           message: "set",
           key: "token",
           value: token,
         });
 
-        setAuth({ id, token });
+        setAuth({ email, token });
         setPage("wishlist");
       })
       .catch((error) => {
@@ -101,16 +108,16 @@ const App: FC<{}> = () => {
 
   const onSignOut = () => {
     chrome.runtime.sendMessage(
-      { message: "get", keys: ["id", "token"] },
+      { message: "get", keys: ["email", "token"] },
       (values: any) => {
-        const [id, token] = values;
-        if (typeof id === "number" && typeof token === "string") {
+        const [email, token] = values;
+        if (typeof email === "string" && typeof token === "string") {
           GetRpcClient.getInstance()
-            .call("SignOut", "/signout", { id, token })
+            .call("SignOut", "/signout", { email, token })
             .catch((err) => console.log(err));
         }
         chrome.runtime.sendMessage({ message: "clear" });
-        setAuth({ id: -1, token: "" });
+        setAuth({ email: "", token: "" });
         setWishlist([]);
         setPage("signin");
       }
@@ -170,7 +177,7 @@ const App: FC<{}> = () => {
       );
     case "signup":
       if (install) {
-        window.resizeTo(320, 600);
+        window.resizeTo(320, 680);
       }
       return (
         <SignUp

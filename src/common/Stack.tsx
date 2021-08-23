@@ -1,12 +1,12 @@
-import type { CSSProperties, FC } from "react";
-import { Children } from "react";
+import { Children, forwardRef } from "react";
+import styled from "styled-components";
 
 export type StackDirection =
-  | "row"
-  | "row-reverse"
+  | "column-reverse"
   | "column"
-  | "column-reverse";
-export type StackAlignment = "flex-start" | "center" | "flex-end";
+  | "row-reverse"
+  | "row";
+export type StackAlignment = "center" | "flex-end" | "flex-start";
 
 export interface StackProps extends React.HTMLProps<HTMLDivElement> {
   direction: StackDirection;
@@ -16,68 +16,53 @@ export interface StackProps extends React.HTMLProps<HTMLDivElement> {
   spacing?: number;
 }
 
-const Stack: FC<StackProps> = (props) => {
-  let baseChildStyle = {};
-  if (props.spacing) {
-    switch (props.direction) {
-      case "row":
-        baseChildStyle = { ...baseChildStyle, marginRight: props.spacing };
-        break;
-      case "column":
-        baseChildStyle = { ...baseChildStyle, marginBottom: props.spacing };
-        break;
-      case "row-reverse":
-        baseChildStyle = { ...baseChildStyle, marginLeft: props.spacing };
-        break;
-      case "column-reverse":
-        baseChildStyle = { ...baseChildStyle, marginTop: props.spacing };
-        break;
-    }
+const directionToMargin = (direction: StackDirection): string => {
+  switch (direction) {
+    case "row":
+      return "right";
+    case "row-reverse":
+      return "left";
+    case "column":
+      return "bottom";
+    case "column-reverse":
+      return "top";
   }
-
-  let style: {} = {
-    ...props.style,
-    display: "flex",
-    flexDirection: props.direction,
-  };
-  if (props.columnAlign) {
-    style = { ...style, justifyContent: props.columnAlign };
-  }
-  if (props.rowAlign) {
-    style = { ...style, alignItems: props.rowAlign };
-  }
-
-  const children = Children.toArray(props.children);
-
-  return (
-    <div {...props} style={style}>
-      {children.map((child, index) => {
-        let childStyle = baseChildStyle;
-        if (props.priority) {
-          childStyle = { ...childStyle, flexGrow: props.priority[index] };
-        }
-
-        if (index >= children.length - 1) {
-          switch (props.direction) {
-            case "row":
-              childStyle = { ...childStyle, marginRight: 0 };
-              break;
-            case "column":
-              childStyle = { ...childStyle, marginBottom: 0 };
-              break;
-            case "row-reverse":
-              childStyle = { ...childStyle, marginLeft: 0 };
-              break;
-            case "column-reverse":
-              childStyle = { ...childStyle, marginTop: 0 };
-              break;
-          }
-        }
-
-        return <div style={childStyle}>{child}</div>;
-      })}
-    </div>
-  );
 };
 
-export default Stack;
+const Stack = forwardRef<HTMLDivElement, StackProps>(
+  ({ direction, columnAlign, rowAlign, ...rest }, ref) => {
+    return (
+      <div ref={ref} {...rest}>
+        {Children.map(rest.children, (child, index) => {
+          return (
+            <div
+              className="stackitem"
+              {...(rest.priority && {
+                style: { flexGrow: rest.priority[index] },
+              })}
+            >
+              {child}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+);
+
+export default styled(Stack)`
+  align-items: ${({ rowAlign }): string | undefined => rowAlign};
+  display: flex;
+  flex-wrap: ${({ wrap }): string | undefined => wrap};
+  flex-direction: ${({ direction }): string | undefined => direction};
+  justify-content: ${({ columnAlign }): string | undefined => columnAlign};
+  > .stackitem {
+      margin-${({ direction }): string | undefined =>
+        directionToMargin(direction)}: ${({ spacing }): number | undefined =>
+  spacing}px;
+        &:last-child {
+            margin-${({ direction }): string | undefined =>
+              directionToMargin(direction)}: 0px;
+        }
+    }
+`;

@@ -24,10 +24,10 @@ export class PostRpcClient {
   async call<methodName extends keyof PostMethods>(
     method: methodName,
     request: PostMethods[methodName]["request"],
-    credentials?: { id: number; token: string }
+    credentials?: { email: string; token: string }
   ): Promise<PostMethods[methodName]["response"]> {
     const auth: { [key: string]: string } = credentials
-      ? { id: credentials.id.toString(), token: credentials.token }
+      ? { email: credentials.email, token: credentials.token }
       : {};
     const endpoint = endpoints.get(method);
     const fetchRequest = new Request(`${baseUrl}${endpoint}`, {
@@ -72,10 +72,10 @@ export class GetRpcClient {
   async call<methodName extends keyof GetMethods>(
     method: methodName,
     endpoint: string,
-    credentials?: { id: number; token: string }
+    credentials?: { email: string; token: string }
   ): Promise<GetMethods[methodName]> {
     const auth: { [key: string]: string } = credentials
-      ? { id: credentials.id.toString(), token: credentials.token }
+      ? { email: credentials.email, token: credentials.token }
       : {};
 
     const fetchRequest = new Request(`${baseUrl}${endpoint}`, {

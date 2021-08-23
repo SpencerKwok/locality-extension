@@ -4,7 +4,7 @@ chrome.runtime.onInstalled.addListener((details) => {
     chrome.windows.create({
       type: "popup",
       url: "popup.html?install=1",
-      height: 420,
+      height: 480,
       width: 320,
       focused: true,
     });

@@ -43,3 +43,8 @@
   color: #0d6efd;
   text-decoration: underline;
 }
+
+/* Form Group */
+.form-group {
+  margin-bottom: 12px;
+}

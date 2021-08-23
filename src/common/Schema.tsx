@@ -50,7 +50,7 @@ export interface SignInRequest {
 }
 
 export interface SignInResponse extends BaseResponse {
-  id: number;
+  email: string;
   token: string;
 }
 
@@ -62,7 +62,7 @@ export interface SignUpRequest {
 }
 
 export interface SignUpResponse extends BaseResponse {
-  id: number;
+  email: string;
   token: string;
 }
 

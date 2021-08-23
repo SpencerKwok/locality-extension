@@ -10,7 +10,7 @@ import type { Product } from "../common/Schema";
 import "./App.css";
 
 export interface AppProps {
-  id: number;
+  email: string;
   token: string;
   initialHits: Array<Product>;
   query: string;
@@ -21,7 +21,7 @@ export interface AppProps {
 let mouseX = -1;
 let mouseY = -1;
 const App: FC<AppProps> = ({
-  id,
+  email,
   token,
   initialHits,
   query,
@@ -35,19 +35,19 @@ const App: FC<AppProps> = ({
     page: 0,
   });
   const [collapsed, setCollapsed] = useState(false);
-  const loggedIn: boolean = !!(typeof id === "number" && token);
+  const loggedIn: boolean = !!(email && token);
   const onToggleWishlist = (objectId: string, value: boolean) => {
     if (value) {
       PostRpcClient.getInstance().call(
         "AddToWishList",
         { id: objectId },
-        { id, token }
+        { email, token }
       );
     } else {
       PostRpcClient.getInstance().call(
         "DeleteFromWishList",
         { id: objectId },
-        { id, token }
+        { email, token }
       );
     }
 
@@ -73,7 +73,7 @@ const App: FC<AppProps> = ({
   if (collapsed) {
     return (
       <img
-        src="https://res.cloudinary.com/hcory49pf/image/upload/v1614846287/extension/locality128.png"
+        src="https://res.cloudinary.com/hcory49pf/image/upload/v1628434355/extension/locality128.png"
         alt="Locality Logo"
         width={64}
         onMouseDown={(event) => {
@@ -144,7 +144,7 @@ const App: FC<AppProps> = ({
 
                 GetRpcClient.getInstance()
                   .call("Search", `/search?q=${query}&pg=${results.page + 1}`, {
-                    id,
+                    email,
                     token,
                   })
                   .then(({ hits }) => {

@@ -1,4 +1,4 @@
-import Button from "react-bootstrap/Button";
+import Button from "../common/button/Button";
 
 import ProductImage from "../common/product-image/ProductImage";
 import Stack from "../common/Stack";
@@ -28,7 +28,7 @@ const Wishlist: FC<WishlistProps> = ({
         >
           <Stack direction="row-reverse" style={{ width: 300 }}>
             <Button
-              variant="secondary"
+              variant="dark"
               style={{ margin: 8, padding: "4px 8px" }}
               onClick={onSignOut}
             >

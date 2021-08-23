@@ -1,11 +1,14 @@
 import * as yup from "yup";
-
-import Form from "react-bootstrap/Form";
-import FormControl from "react-bootstrap/FormControl";
 import { Formik } from "formik";
 
 import LocalityLogo from "../common/images/LocalityLogo";
-import { ErrorMessage, InputGroup, Label, SubmitButton } from "../common/form";
+import {
+  ErrorMessage,
+  FormGroup,
+  Input,
+  InputGroup,
+  SubmitButton,
+} from "../common/form";
 import Stack from "../common/Stack";
 import "./App.css";
 
@@ -13,24 +16,32 @@ import type { FC } from "react";
 import type { FormikConfig } from "formik";
 
 const SignUpSchema = yup.object().shape({
-  firstName: yup.string().required("Required").max(255, "Too long"),
-  lastName: yup.string().required("Required").max(255, "Too long"),
+  firstName: yup
+    .string()
+    .strict(true)
+    .required("Required")
+    .max(255, "Too long"),
+  lastName: yup.string().strict(true).required("Required").max(255, "Too long"),
   email: yup
     .string()
+    .strict(true)
     .email("Invalid email address")
     .required("Required")
     .max(255, "Too long"),
   password1: yup
     .string()
+    .strict(true)
     .required("Required")
     .min(8, "Too short")
     .max(255, "Too long"),
   password2: yup
     .string()
+    .strict(true)
     .required("Required")
     .min(8, "Too short")
     .max(255, "Too long")
     .oneOf([yup.ref("password1")], "Passwords do not match"),
+  subscribe: yup.boolean().strict(true).required("Required"),
 });
 
 export interface SignUpRequest {
@@ -39,6 +50,7 @@ export interface SignUpRequest {
   email: string;
   password1: string;
   password2: string;
+  subscribe: boolean;
 }
 
 export interface SignUpProps {
@@ -56,7 +68,9 @@ const SignUp: FC<SignUpProps> = ({ error, onSignIn, onSignUp }) => {
           spacing={6}
           style={{ marginTop: 20, marginBottom: 20 }}
         >
-          <LocalityLogo height={60} width={200} />
+          <Stack direction="row" columnAlign="center">
+            <LocalityLogo height={60} width={200} />
+          </Stack>
           <Formik
             initialValues={
               {
@@ -65,6 +79,7 @@ const SignUp: FC<SignUpProps> = ({ error, onSignIn, onSignUp }) => {
                 email: "",
                 password1: "",
                 password2: "",
+                subscribe: true,
               } as SignUpRequest
             }
             validationSchema={SignUpSchema}
@@ -77,79 +92,79 @@ const SignUp: FC<SignUpProps> = ({ error, onSignIn, onSignUp }) => {
               handleChange,
               handleSubmit,
             }) => (
-              <Form onSubmit={handleSubmit} style={{ width: 200 }}>
-                <Form.Group>
-                  <Label required>First Name</Label>
-                  <InputGroup>
-                    <FormControl
+              <form onSubmit={handleSubmit} style={{ width: 200 }}>
+                <FormGroup>
+                  <InputGroup required>
+                    <Input
+                      required
                       aria-required
                       aria-label="First Name"
                       aria-details="Enter first name here"
                       id="firstName"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      placeholder="Enter first name"
+                      placeholder="First Name"
                       type="text"
                       value={values.firstName}
                     />
                   </InputGroup>
                   <ErrorMessage name="firstName" />
-                </Form.Group>
-                <Form.Group>
-                  <Label required>Last Name</Label>
+                </FormGroup>
+                <FormGroup>
                   <InputGroup>
-                    <FormControl
+                    <Input
+                      required
                       aria-required
                       aria-label="Last Name"
-                      aria-details="Enter last name here"
+                      aria-details="Enter last name"
                       id="lastName"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      placeholder="Enter last name"
+                      placeholder="Last Name"
                       type="text"
                       value={values.lastName}
                     />
                   </InputGroup>
                   <ErrorMessage name="lastName" />
-                </Form.Group>
-                <Form.Group>
-                  <Label required>Email</Label>
+                </FormGroup>
+                <FormGroup>
                   <InputGroup>
-                    <FormControl
+                    <Input
+                      required
                       aria-required
                       aria-label="Email"
                       aria-details="Enter email here"
                       id="email"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      placeholder="Enter email"
+                      placeholder="Email"
                       type="email"
                       value={values.email}
                     />
                   </InputGroup>
                   <ErrorMessage name="email" />
-                </Form.Group>
-                <Form.Group>
-                  <Label required>Password</Label>
+                </FormGroup>
+                <FormGroup>
                   <InputGroup>
-                    <FormControl
+                    <Input
+                      required
                       aria-required
                       aria-label="Password"
                       aria-details="Enter password here"
                       id="password1"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      placeholder="Enter password"
+                      placeholder="Password"
                       type="password"
                       value={values.password1}
                     />
                   </InputGroup>
                   <ErrorMessage name="password1" />
-                </Form.Group>
-                <Form.Group>
-                  <Label required>Re-enter password</Label>
+                </FormGroup>
+                <FormGroup>
                   <InputGroup>
-                    <FormControl
+                    <Input
+                      required
                       aria-required
                       aria-label="Re-enter Password"
                       aria-details="Re-enter password here"
@@ -162,7 +177,29 @@ const SignUp: FC<SignUpProps> = ({ error, onSignIn, onSignUp }) => {
                     />
                   </InputGroup>
                   <ErrorMessage name="password2" />
-                </Form.Group>
+                </FormGroup>
+                <FormGroup>
+                  <InputGroup>
+                    <Stack direction="row" rowAlign="center" spacing={24}>
+                      <Input
+                        defaultChecked
+                        aria-label="Occassional marketing email checkbox"
+                        aria-details="Checkbox to opt in to occassional marketing emails"
+                        id="subscribe"
+                        type="checkbox"
+                        label=" I'd like to receive occasional marketing emails from Locality."
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.subscribe ? "true" : "false"}
+                      />
+                      <p style={{ fontSize: 11, margin: 0 }}>
+                        I'd like to receive occasional marketing emails from
+                        Locality.
+                      </p>
+                    </Stack>
+                  </InputGroup>
+                  <ErrorMessage name="subscribe" />
+                </FormGroup>
                 <div className="locality-error" style={{ width: 200 }}>
                   {error}
                 </div>
@@ -173,7 +210,7 @@ const SignUp: FC<SignUpProps> = ({ error, onSignIn, onSignUp }) => {
                     isSubmitting={isSubmitting}
                   />
                 </Stack>
-              </Form>
+              </form>
             )}
           </Formik>
           <div style={{ textAlign: "center" }}>
