@@ -152,7 +152,7 @@ const App: FC<{}> = () => {
   switch (page) {
     case "wishlist":
       if (install) {
-        window.resizeTo(320, 420);
+        window.resizeTo(330, 360);
         return (
           <Stack
             direction="column"
@@ -177,7 +177,7 @@ const App: FC<{}> = () => {
       );
     case "signup":
       if (install) {
-        window.resizeTo(320, 680);
+        window.resizeTo(330, 540);
       }
       return (
         <SignUp
@@ -188,7 +188,7 @@ const App: FC<{}> = () => {
       );
     default:
       if (install) {
-        window.resizeTo(320, 420);
+        window.resizeTo(330, 360);
       }
       return (
         <SignIn
