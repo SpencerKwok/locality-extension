@@ -1,6 +1,6 @@
 {
   "name": "Locality - Local Shopping Made Easy",
-  "version": "0.0.0.15",
+  "version": "0.0.0.17",
   "manifest_version": 3,
   "description": "Instantly find products from locally owned small businesses in BC without changing your search habits! Shopping locally made simple.",
   "action": {
@@ -27,7 +27,8 @@
         "*://www.walmart.ca/browse*",
         "*://www.walmart.ca/search*",
         "*://www.walmart.com/browse*",
-        "*://www.walmart.com/search*"
+        "*://www.walmart.com/search*",
+        "*://www.thealfajorcompany.ca/*"
       ]
     }
   ],
