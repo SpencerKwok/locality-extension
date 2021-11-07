@@ -1,12 +1,15 @@
 import ReactDOM from "react-dom";
-import App from "./injection/App";
+import CouponApp from "./injection/coupon/App";
+import SearchApp from "./injection/search/App";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { GetRpcClient } from "./common/RpcClient";
 import styles from "./injection.module.css";
 
 import type { FC } from "react";
-import type { AppProps } from "./injection/App";
+import type { CouponData } from "./common/Schema";
+import type { AppProps as CouponAppProps } from "./injection/coupon/App";
+import type { AppProps as SearchAppProps } from "./injection/search/App";
 
 let open = true;
 let mouseDown = false;
@@ -70,7 +73,7 @@ app.className = styles["locality-window"];
 app.id = "locality";
 document.body.insertBefore(app, document.body.firstChild);
 
-const onOpen = () => {
+const searchOnOpen = () => {
   open = true;
   fixHorizontal = false;
   app.style.left = "";
@@ -79,7 +82,7 @@ const onOpen = () => {
   app.className = styles["locality-window"];
 };
 
-const onClose = () => {
+const searchOnClose = () => {
   open = false;
   fixHorizontal = true;
   app.style.left = "";
@@ -88,7 +91,7 @@ const onClose = () => {
   app.className = styles["locality-window-collapsed"];
 };
 
-const onResize = () => {
+const searchOnResize = () => {
   if (open) {
     app.style.left = "";
     app.style.top = "60px";
@@ -100,8 +103,42 @@ const onResize = () => {
   }
 };
 
-const AppWrapper: FC<AppProps> = (props) => {
-  return ReactDOM.createPortal(<App {...props} />, app);
+const couponOnOpen = () => {
+  open = true;
+  fixHorizontal = false;
+  app.style.left = "";
+  app.style.top = "20px";
+  app.style.right = "20px";
+  app.className = styles["locality-window"];
+};
+
+const couponOnClose = () => {
+  open = false;
+  fixHorizontal = true;
+  app.style.left = "";
+  app.style.top = "0px";
+  app.style.right = "0px";
+  app.className = styles["locality-window-collapsed"];
+};
+
+const couponOnResize = () => {
+  if (open) {
+    app.style.left = "";
+    app.style.top = "20px";
+    app.style.right = "20px";
+  } else {
+    app.style.left = "";
+    app.style.top = "0px";
+    app.style.right = "0px";
+  }
+};
+
+const SearchAppWrapper: FC<SearchAppProps> = (props) => {
+  return ReactDOM.createPortal(<SearchApp {...props} />, app);
+};
+
+const CouponAppWrapper: FC<CouponAppProps> = (props) => {
+  return ReactDOM.createPortal(<CouponApp {...props} />, app);
 };
 
 // Search
@@ -132,29 +169,83 @@ if (
           .then(({ hits }) => {
             if (hits.length > 0)
               ReactDOM.render(
-                <AppWrapper
+                <SearchAppWrapper
                   email={email}
                   token={token}
                   initialHits={hits}
                   query={query}
-                  onOpen={onOpen}
-                  onClose={onClose}
+                  onOpen={searchOnOpen}
+                  onClose={searchOnClose}
                 />,
                 app
               );
+
+            window.addEventListener("resize", searchOnResize);
+            window.addEventListener("unload", () => {
+              window.removeEventListener("resize", searchOnResize);
+            });
           });
       }
     }
   );
 }
 
-// Coupon
-else {
-  const hostname = "https://locality-ui-dev.herokuapp.com";
+// Coupons
+else if (window.location.host.match(/shop\.app/)) {
+  new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
+    const logo: HTMLImageElement | null = document.querySelector(
+      "#app > section > header > div._330j5._13qKW > div > button > img"
+    );
+    if (logo) {
+      const hostname = "https://mylocality.shop";
+      fetch(
+        `${hostname}/api/extension/checkout/shop_app/get?name=${encodeURIComponent(
+          logo.alt
+        )}`
+      )
+        .then((res) => res.json())
+        .then(
+          async ({
+            coupons,
+            input,
+            submit,
+            total,
+          }: {
+            coupons: Array<CouponData>;
+            input: Array<string>;
+            submit: Array<string>;
+            total: Array<string>;
+          }) => {
+            if (coupons.length > 0) {
+              app.style.top = "20px";
+              ReactDOM.render(
+                <CouponAppWrapper
+                  coupons={coupons}
+                  input={input}
+                  submit={submit}
+                  total={total}
+                  onOpen={couponOnOpen}
+                  onClose={couponOnClose}
+                />,
+                app
+              );
+
+              window.addEventListener("resize", couponOnResize);
+              window.addEventListener("unload", () => {
+                window.removeEventListener("resize", couponOnResize);
+              });
+            }
+          }
+        )
+        .catch((err) => console.log(err));
+    }
+  });
+} else {
+  const hostname = "https://mylocality.shop";
   fetch(`${hostname}/api/extension/checkout/get`)
     .then((res) => res.json())
     .then(
-      ({
+      async ({
         checkoutUrl,
         input,
         submit,
@@ -168,84 +259,33 @@ else {
         // Check if we are on the checkout URL
         const re = new RegExp(checkoutUrl);
         if (re.test(window.location.href)) {
-          // Click through prefix elements to reveal input, submit, and total elements
-          [input, submit, total].forEach((x) => {
-            x.slice(0, x.length - 1).forEach((selector) => {
-              const rawElem = document.querySelector(selector);
-              if (rawElem) {
-                const elem = rawElem as HTMLButtonElement;
-                elem.click && elem.click();
+          // Get coupons
+          fetch(`${hostname}/api/extension/coupons/get`)
+            .then((res) => res.json())
+            .then(async ({ coupons }: { coupons: Array<CouponData> }) => {
+              if (coupons.length > 0) {
+                app.style.top = "20px";
+                ReactDOM.render(
+                  <CouponAppWrapper
+                    coupons={coupons}
+                    input={input}
+                    submit={submit}
+                    total={total}
+                    onOpen={couponOnOpen}
+                    onClose={couponOnClose}
+                  />,
+                  app
+                );
+
+                window.addEventListener("resize", couponOnResize);
+                window.addEventListener("unload", () => {
+                  window.removeEventListener("resize", couponOnResize);
+                });
               }
-            });
-          });
-
-          // Check if input, submit, and total elements all exist
-          const rawInput = document.querySelector(input[input.length - 1]);
-          const rawSubmit = document.querySelector(submit[submit.length - 1]);
-          const rawTotal = document.querySelector(total[total.length - 1]);
-          if (rawInput && rawSubmit && rawTotal) {
-            const inputElem = rawInput as HTMLInputElement;
-            const submitElem = rawSubmit as HTMLButtonElement;
-            const totalElem = rawTotal as HTMLDivElement | HTMLSpanElement;
-
-            // Get coupons
-            fetch(`${hostname}/api/extension/coupons/get`)
-              .then((res) => res.json())
-              .then(
-                async ({ coupons }: { coupons: Array<{ coupon: string }> }) => {
-                  // Get previous total
-                  const previousTotal = parseFloat(
-                    totalElem.innerText.replace(/[^0-9.]/gi, "")
-                  );
-
-                  // Setup event handler to handle total amount change
-                  let minimumTotal = previousTotal;
-                  const totalChangeEventListener = () => {
-                    const newRawTotal = document.querySelector(
-                      total[total.length - 1]
-                    );
-                    const newTotalElem = newRawTotal as
-                      | HTMLDivElement
-                      | HTMLSpanElement;
-                    const newTotal = parseFloat(
-                      newTotalElem.innerText.replace(/[^0-9.]/gi, "")
-                    );
-                    minimumTotal = Math.min(minimumTotal, newTotal);
-                  };
-                  document.addEventListener("change", totalChangeEventListener);
-
-                  // Apply all coupons
-                  for (let i = 0; i < coupons.length; ++i) {
-                    const { coupon } = coupons[i];
-                    inputElem.value = coupon;
-                    submitElem.disabled = false;
-                    submitElem.click && submitElem.click();
-                    void (await new Promise((resolve) =>
-                      setTimeout(resolve, 3000)
-                    ));
-                  }
-
-                  // Remove total amount change event handler
-                  document.removeEventListener(
-                    "change",
-                    totalChangeEventListener
-                  );
-
-                  // Check if the user has saved any money
-                  if (minimumTotal < previousTotal) {
-                    console.log("Savings!");
-                  }
-                }
-              )
-              .catch((err) => console.log(err));
-          }
+            })
+            .catch((err) => console.log(err));
         }
       }
     )
     .catch((err) => console.log(err));
 }
-
-window.addEventListener("resize", onResize);
-window.addEventListener("unload", () => {
-  window.removeEventListener("resize", onResize);
-});

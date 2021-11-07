@@ -28,7 +28,9 @@
         "*://www.walmart.ca/search*",
         "*://www.walmart.com/browse*",
         "*://www.walmart.com/search*",
-        "*://www.thealfajorcompany.ca/*"
+        "*://www.thealfajorcompany.ca/*",
+        "*://www.unimpressedofficial.com/*",
+        "*://shop.app/pay/transactions/new/token/*"
       ]
     }
   ],

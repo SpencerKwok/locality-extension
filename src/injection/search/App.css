@@ -1,0 +1,59 @@
+/* Link */
+.locality-link-end,
+.locality-link {
+  text-decoration: none;
+  color: #000000;
+  margin-bottom: 8px;
+}
+.locality-link {
+  margin-right: 8px;
+}
+.locality-link-end:link,
+.locality-link:link {
+  text-decoration: none;
+  color: #000000;
+}
+.locality-link-end:visited,
+.locality-link:visited {
+  text-decoration: none;
+  color: #000000;
+}
+.locality-link-end:hover,
+.locality-link:hover {
+  text-decoration: none;
+  color: #000000;
+}
+.locality-link-end:active,
+.locality-link:active {
+  text-decoration: none;
+  color: #000000;
+}
+
+/* Close Button */
+.locality-close {
+  cursor: pointer;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  opacity: 0.3;
+}
+.locality-close:hover {
+  opacity: 1;
+}
+.locality-close:before,
+.locality-close:after {
+  position: absolute;
+  left: 7px;
+  content: " ";
+  height: 16px;
+  width: 2px;
+  background-color: #333;
+}
+.locality-close:before {
+  transform: rotate(45deg);
+}
+.locality-close:after {
+  transform: rotate(-45deg);
+}

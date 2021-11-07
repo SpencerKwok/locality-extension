@@ -1,12 +1,12 @@
 import { useState } from "react";
 
-import { GetRpcClient, PostRpcClient } from "../common/RpcClient";
-import LocalityLogo from "../common/images/LocalityLogo";
-import ProductImage from "../common/product-image/ProductImage";
-import Stack from "../common/Stack";
+import { GetRpcClient, PostRpcClient } from "../../common/RpcClient";
+import LocalityLogo from "../../common/images/LocalityLogo";
+import ProductImage from "../../common/product-image/ProductImage";
+import Stack from "../../common/Stack";
 
 import type { FC } from "react";
-import type { Product } from "../common/Schema";
+import type { Product } from "../../common/Schema";
 import "./App.css";
 
 export interface AppProps {
