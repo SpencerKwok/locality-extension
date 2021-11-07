@@ -2,6 +2,10 @@ export interface BaseResponse {
   error?: string;
 }
 
+export interface CouponData {
+  coupon: string;
+}
+
 export interface Product {
   objectId: string;
   name: string;
