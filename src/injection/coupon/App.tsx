@@ -12,7 +12,6 @@ export interface AppProps {
   coupons: Array<CouponData>;
   input: Array<string>;
   submit: Array<string>;
-  total: Array<string>;
   onOpen: () => void;
   onClose: () => void;
 }
@@ -52,32 +51,28 @@ const StyledButton = styled.button`
 
 const showCheckoutElements = async (
   input: Array<string>,
-  submit: Array<string>,
-  total: Array<string>
+  submit: Array<string>
 ): Promise<{
   inputElem: HTMLInputElement | null;
   submitElem: HTMLButtonElement | null;
-  totalElem: HTMLDivElement | HTMLSpanElement | null;
 }> => {
   const elementClickOrder = [
     ...input.slice(0, input.length - 1),
     ...submit.slice(0, submit.length - 1),
-    ...total.slice(0, total.length - 1),
   ];
 
   let inputElem: HTMLInputElement | null = null;
   let submitElem: HTMLButtonElement | null = null;
-  let totalElem: HTMLDivElement | HTMLSpanElement | null = null;
 
   let index = 0;
   let observer: MutationObserver = new MutationObserver(() => {});
   const p1 = new Promise<void>((resolve) => {
     observer = new MutationObserver((mutationsList, observer) => {
-      mutationsList.forEach(({ addedNodes }) => {
+      mutationsList.forEach(({ addedNodes }: { addedNodes: any }) => {
         let index1 = 0;
         while (addedNodes[index1]) {
           let index2 = 0;
-          const addedNode: any = addedNodes[index1];
+          const addedNode = addedNodes[index1];
           while (addedNode[index2]) {
             const elem = addedNode[index2];
             switch (`#${elem.id}`) {
@@ -87,9 +82,6 @@ const showCheckoutElements = async (
               case submit[submit.length - 1]:
                 submitElem = elem;
                 break;
-              case total[total.length - 1]:
-                totalElem = elem;
-                break;
             }
             switch (elem.getAttribute("class")) {
               case input[input.length - 1]:
@@ -98,12 +90,25 @@ const showCheckoutElements = async (
               case submit[submit.length - 1]:
                 submitElem = elem;
                 break;
-              case total[total.length - 1]:
-                totalElem = elem;
-                break;
             }
             index2 += 1;
           }
+
+          if ("nextElementSibling" in addedNodes[index1]) {
+            const nextElementSibling = addedNodes[index1]["nextElementSibling"];
+            if (nextElementSibling.querySelector(input[input.length - 1])) {
+              inputElem = nextElementSibling.querySelector(
+                input[input.length - 1]
+              );
+            } else if (
+              nextElementSibling.querySelector(submit[submit.length - 1])
+            ) {
+              submitElem = nextElementSibling.querySelector(
+                submit[submit.length - 1]
+              );
+            }
+          }
+
           index1 += 1;
         }
       });
@@ -136,23 +141,14 @@ const showCheckoutElements = async (
   return {
     inputElem,
     submitElem,
-    totalElem,
   };
 };
 
 let mouseX = -1;
 let mouseY = -1;
-const App: FC<AppProps> = ({
-  coupons,
-  input,
-  submit,
-  total,
-  onOpen,
-  onClose,
-}) => {
+const App: FC<AppProps> = ({ coupons, input, submit, onOpen, onClose }) => {
   const [appliedCoupons, setAppliedCoupons] = useState(false);
   const [applyingCoupons, setApplyingCoupons] = useState(false);
-  const [savings, setSavings] = useState(0);
   const [collapsed, setCollapsed] = useState(false);
 
   const preSavingsComponents = (
@@ -168,8 +164,7 @@ const App: FC<AppProps> = ({
           setApplyingCoupons(true);
           const revealedCheckoutElements = await showCheckoutElements(
             input,
-            submit,
-            total
+            submit
           );
 
           const inputElem = revealedCheckoutElements.inputElem
@@ -182,33 +177,6 @@ const App: FC<AppProps> = ({
             : (document.querySelector(
                 submit[submit.length - 1]
               ) as HTMLButtonElement);
-          const totalElem = revealedCheckoutElements.totalElem
-            ? revealedCheckoutElements.totalElem
-            : (document.querySelector(total[total.length - 1]) as
-                | HTMLDivElement
-                | HTMLSpanElement);
-
-          // Get previous total
-          const previousTotal = parseFloat(
-            totalElem.innerText.replace(/[^0-9.]/gi, "")
-          );
-
-          // Setup event handler to handle total amount change
-          let minimumTotal = previousTotal;
-          const observer = new MutationObserver(() => {
-            const newRawTotal = document.querySelector(total[total.length - 1]);
-            const newTotalElem = newRawTotal as
-              | HTMLDivElement
-              | HTMLSpanElement;
-            const newTotal = parseFloat(
-              newTotalElem.innerText.replace(/[^0-9.]/gi, "")
-            );
-            minimumTotal = Math.min(minimumTotal, newTotal);
-          });
-          observer.observe(document, {
-            childList: true,
-            subtree: true,
-          });
 
           // Apply all coupons
           for (let i = 0; i < coupons.length; ++i) {
@@ -217,14 +185,6 @@ const App: FC<AppProps> = ({
             inputElem.dispatchEvent(new Event("input", { bubbles: true }));
             submitElem.click && submitElem.click();
             void (await new Promise((resolve) => setTimeout(resolve, 2000)));
-          }
-
-          // Remove total amount change event handler
-          observer.disconnect();
-
-          // Check if the user has saved any money
-          if (minimumTotal < previousTotal) {
-            setSavings(previousTotal - minimumTotal);
           }
 
           // Well, we tried applying coupons
@@ -237,15 +197,6 @@ const App: FC<AppProps> = ({
   );
 
   const postSavingsSuccessComponents = (
-    <Fragment>
-      <div style={{ marginBottom: 12, textAlign: "left", width: 200 }}>
-        You saved ${savings.toFixed(2)}! Thank you for supporting your local
-        businesses!
-      </div>
-    </Fragment>
-  );
-
-  const postSavingsFailureComponents = (
     <Fragment>
       <div style={{ marginBottom: 12, textAlign: "left", width: 200 }}>
         Applied coupons! Thank you for supporting your local businesses!
@@ -300,8 +251,6 @@ const App: FC<AppProps> = ({
           <LocalityLogo height={60} width={200} />
           {!appliedCoupons
             ? preSavingsComponents
-            : savings <= 0
-            ? postSavingsFailureComponents
             : postSavingsSuccessComponents}
         </Stack>
       </Stack>
