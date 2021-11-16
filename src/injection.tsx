@@ -11,6 +11,8 @@ import type { CouponData } from "./common/Schema";
 import type { AppProps as CouponAppProps } from "./injection/coupon/App";
 import type { AppProps as SearchAppProps } from "./injection/search/App";
 
+const HOST_NAME = "https://mylocality.shop";
+
 let open = true;
 let mouseDown = false;
 let fixHorizontal = false;
@@ -197,9 +199,8 @@ else if (window.location.host.match(/shop\.app/)) {
       "#app > section > header > div._330j5._13qKW > div > button > img"
     );
     if (logo) {
-      const hostname = "https://mylocality.shop";
       fetch(
-        `${hostname}/api/extension/checkout/shop_app/get?name=${encodeURIComponent(
+        `${HOST_NAME}/api/extension/checkout/shop_app/get?name=${encodeURIComponent(
           logo.alt
         )}`
       )
@@ -223,7 +224,6 @@ else if (window.location.host.match(/shop\.app/)) {
                   coupons={coupons}
                   input={input}
                   submit={submit}
-                  total={total}
                   onOpen={couponOnOpen}
                   onClose={couponOnClose}
                 />,
@@ -241,8 +241,7 @@ else if (window.location.host.match(/shop\.app/)) {
     }
   });
 } else {
-  const hostname = "https://mylocality.shop";
-  fetch(`${hostname}/api/extension/checkout/get`)
+  fetch(`${HOST_NAME}/api/extension/checkout/get`)
     .then((res) => res.json())
     .then(
       async ({
@@ -260,7 +259,7 @@ else if (window.location.host.match(/shop\.app/)) {
         const re = new RegExp(checkoutUrl);
         if (re.test(window.location.href)) {
           // Get coupons
-          fetch(`${hostname}/api/extension/coupons/get`)
+          fetch(`${HOST_NAME}/api/extension/coupons/get`)
             .then((res) => res.json())
             .then(async ({ coupons }: { coupons: Array<CouponData> }) => {
               if (coupons.length > 0) {
@@ -270,7 +269,6 @@ else if (window.location.host.match(/shop\.app/)) {
                     coupons={coupons}
                     input={input}
                     submit={submit}
-                    total={total}
                     onOpen={couponOnOpen}
                     onClose={couponOnClose}
                   />,
@@ -284,6 +282,44 @@ else if (window.location.host.match(/shop\.app/)) {
               }
             })
             .catch((err) => console.log(err));
+        }
+
+        // Could be hash that is set later, set listener to check...
+        else {
+          const hashChangeEventHandler = (): any => {
+            const re = new RegExp(checkoutUrl);
+            if (re.test(window.location.href)) {
+              // Get coupons
+              fetch(`${HOST_NAME}/api/extension/coupons/get`)
+                .then((res) => res.json())
+                .then(async ({ coupons }: { coupons: Array<CouponData> }) => {
+                  if (coupons.length > 0) {
+                    app.style.top = "20px";
+                    ReactDOM.render(
+                      <CouponAppWrapper
+                        coupons={coupons}
+                        input={input}
+                        submit={submit}
+                        onOpen={couponOnOpen}
+                        onClose={couponOnClose}
+                      />,
+                      app
+                    );
+
+                    window.addEventListener("resize", couponOnResize);
+                    window.addEventListener("unload", () => {
+                      window.removeEventListener("resize", couponOnResize);
+                    });
+                  }
+                })
+                .catch((err) => console.log(err));
+              return window.removeEventListener(
+                "hashchange",
+                hashChangeEventHandler
+              );
+            }
+          };
+          window.addEventListener("hashchange", hashChangeEventHandler);
         }
       }
     )
