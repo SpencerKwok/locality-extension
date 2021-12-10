@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { GetRpcClient, PostRpcClient } from "../../common/RpcClient";
 import LocalityLogo from "../../common/images/LocalityLogo";
@@ -17,6 +17,57 @@ export interface AppProps {
   onOpen: () => void;
   onClose: () => void;
 }
+
+const onProductClick = (objectId: string): void => {
+  void PostRpcClient.getInstance().call("ClickMonetization", {
+    type: "click",
+    isExtension: true,
+    objectId,
+  });
+};
+
+const onProductView = (objectId: string, offsetTop: number): void => {
+  void PostRpcClient.getInstance().call("ViewMonetization", {
+    type: "view",
+    isExtension: true,
+    objectId,
+    offsetTop,
+  });
+};
+
+const uniqueHits = new Set<string>();
+const updateUniqueHits = (hits: Product[]): void => {
+  hits.forEach((value) => {
+    const { objectId } = value;
+
+    if (uniqueHits.has(objectId)) {
+      return;
+    }
+
+    const elem = document.getElementById(objectId);
+    if (!elem) {
+      return;
+    }
+
+    const localityProductWindow = document.getElementById("locality-products");
+    if (!localityProductWindow) {
+      return;
+    }
+
+    const localityProductWindowBox =
+      localityProductWindow.getBoundingClientRect();
+    const box = elem.getBoundingClientRect();
+    if (
+      box.top >= localityProductWindowBox.top &&
+      box.left >= localityProductWindowBox.left &&
+      box.right <= localityProductWindowBox.right &&
+      box.bottom <= localityProductWindowBox.bottom
+    ) {
+      uniqueHits.add(objectId);
+      onProductView(objectId, elem.offsetTop);
+    }
+  });
+};
 
 let mouseX = -1;
 let mouseY = -1;
@@ -38,13 +89,13 @@ const App: FC<AppProps> = ({
   const loggedIn: boolean = !!(email && token);
   const onToggleWishlist = (objectId: string, value: boolean) => {
     if (value) {
-      PostRpcClient.getInstance().call(
+      void PostRpcClient.getInstance().call(
         "AddToWishList",
         { id: objectId },
         { email, token }
       );
     } else {
-      PostRpcClient.getInstance().call(
+      void PostRpcClient.getInstance().call(
         "DeleteFromWishList",
         { id: objectId },
         { email, token }
@@ -69,6 +120,10 @@ const App: FC<AppProps> = ({
       }
     }
   };
+
+  useEffect(() => {
+    updateUniqueHits(results.hits);
+  }, [results]);
 
   if (collapsed) {
     return (
@@ -119,6 +174,7 @@ const App: FC<AppProps> = ({
             Results for "{query}" in your area!
           </div>
           <Stack
+            id="locality-products"
             direction="column"
             rowAlign="center"
             style={{
@@ -129,6 +185,8 @@ const App: FC<AppProps> = ({
               position: "relative",
             }}
             onScroll={(event) => {
+              updateUniqueHits(results.hits);
+
               if (
                 !results.isAllHits &&
                 !results.loadingHits &&
@@ -195,6 +253,7 @@ const App: FC<AppProps> = ({
                               loading={(index * 3) % 24 < 9 ? "eager" : "lazy"}
                               product={product}
                               onToggleWishList={onToggleWishlist}
+                              onProductClick={onProductClick}
                             />
                           );
                         });

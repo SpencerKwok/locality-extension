@@ -11,7 +11,7 @@ import type { CouponData } from "./common/Schema";
 import type { AppProps as CouponAppProps } from "./injection/coupon/App";
 import type { AppProps as SearchAppProps } from "./injection/search/App";
 
-const HOST_NAME = "https://mylocality.shop";
+const HOST_NAME = "https://locality-ui-dev.herokuapp.com"; //"https://mylocality.shop";
 
 let open = true;
 let mouseDown = false;
@@ -169,7 +169,7 @@ if (
             token,
           })
           .then(({ hits }) => {
-            if (hits.length > 0)
+            if (hits.length > 0) {
               ReactDOM.render(
                 <SearchAppWrapper
                   email={email}
@@ -181,6 +181,7 @@ if (
                 />,
                 app
               );
+            }
 
             window.addEventListener("resize", searchOnResize);
             window.addEventListener("unload", () => {
@@ -313,13 +314,11 @@ else if (window.location.host.match(/shop\.app/)) {
                   }
                 })
                 .catch((err) => console.log(err));
-              return window.removeEventListener(
-                "hashchange",
-                hashChangeEventHandler
-              );
+              clearInterval();
             }
           };
-          window.addEventListener("hashchange", hashChangeEventHandler);
+
+          setInterval(hashChangeEventHandler, 1000);
         }
       }
     )

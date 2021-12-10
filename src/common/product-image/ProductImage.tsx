@@ -16,6 +16,7 @@ export interface ProductImageProps extends React.HTMLProps<HTMLDivElement> {
   loggedIn?: boolean;
   product: Product;
   onToggleWishList: (id: string, value: boolean) => void;
+  onProductClick: (objectId: string) => void;
 }
 
 const ProductImage: FC<ProductImageProps> = ({
@@ -27,6 +28,7 @@ const ProductImage: FC<ProductImageProps> = ({
   style,
   product,
   onToggleWishList,
+  onProductClick,
 }) => {
   const [hover, setHover] = useState(false);
   const [wishlist, setWishList] = useState(initialWishList);
@@ -95,6 +97,10 @@ const ProductImage: FC<ProductImageProps> = ({
         target="_blank"
         rel="noopener noreferrer"
         style={{ textDecoration: "none", color: "black" }}
+        id={objectId}
+        onClick={(): void => {
+          onProductClick(objectId);
+        }}
       >
         <Stack direction="column" rowAlign="flex-start" style={style}>
           <picture

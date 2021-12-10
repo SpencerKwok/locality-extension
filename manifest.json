@@ -1,6 +1,6 @@
 {
   "name": "Locality - Local Shopping Made Easy",
-  "version": "0.0.0.18",
+  "version": "0.0.0.19",
   "manifest_version": 3,
   "description": "Instantly find products from locally owned small businesses in BC without changing your search habits! Shopping locally made simple.",
   "action": {
@@ -40,7 +40,7 @@
   },
   "content_security_policy": {
     "popup": "default-src 'self'",
-    "extension_pages": "default-src 'self'; script-src 'self'; style-src 'self' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='; connect-src https://locality-ui-dev.herokuapp.com https://www.mylocality.shop 'self'; img-src https://res.cloudinary.com https://i.etsystatic.com https://images.squarespace-cdn.com https://cdn.shopify.com data:"
+    "extension_pages": "default-src 'self'; script-src 'self'; style-src 'self' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=' 'sha256-4Su6mBWzEIFnH4pAGMOuaeBrstwJN4Z3pq/s1Kn4/KQ='; connect-src https://locality-ui-dev.herokuapp.com https://www.mylocality.shop 'self'; img-src https://res.cloudinary.com https://i.etsystatic.com https://images.squarespace-cdn.com https://cdn.shopify.com data:"
   },
   "permissions": ["storage"],
   "icons": {

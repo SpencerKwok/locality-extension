@@ -34,6 +34,14 @@ export interface PostMethods {
     request: SignUpRequest;
     response: SignUpResponse;
   };
+  ClickMonetization: {
+    request: ClickMonetizationRequest;
+    response: ClickMonetizationResponse;
+  };
+  ViewMonetization: {
+    request: ViewMonetizationRequest;
+    response: ViewMonetizationResponse;
+  };
 }
 
 export interface AddToWishListRequest {
@@ -69,6 +77,25 @@ export interface SignUpResponse extends BaseResponse {
   email: string;
   token: string;
 }
+
+export interface ClickMonetizationRequest {
+  type: "click";
+  isMobile?: boolean;
+  isExtension?: boolean;
+  objectId: string;
+}
+
+export interface ClickMonetizationResponse extends BaseResponse {}
+
+export interface ViewMonetizationRequest {
+  type: "view";
+  isMobile?: boolean;
+  isExtension?: boolean;
+  objectId: string;
+  offsetTop: number;
+}
+
+export interface ViewMonetizationResponse extends BaseResponse {}
 
 export interface GetMethods {
   Search: SearchResponse;

@@ -61,6 +61,7 @@ const Wishlist: FC<WishlistProps> = ({
                                 loading={index * 3 < 9 ? "eager" : "lazy"}
                                 product={product}
                                 onToggleWishList={onToggleWishlist}
+                                onProductClick={() => {}}
                               />
                             );
                           });

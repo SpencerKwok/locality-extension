@@ -6,6 +6,8 @@ const endpoints = new Map<keyof PostMethods, string>([
   ["DeleteFromWishList", "/wishlist/delete"],
   ["SignIn", "/signin/credentials"],
   ["SignUp", "/signup/user"],
+  ["ClickMonetization", "/monetization"],
+  ["ViewMonetization", "/monetization"],
 ]);
 
 let postRpcClient: PostRpcClient;
@@ -47,6 +49,10 @@ export class PostRpcClient {
     }
 
     let response: PostMethods[methodName]["response"];
+    if (rawResponse.status === 204) {
+      return {};
+    }
+
     try {
       response = await rawResponse.json();
     } catch (err) {

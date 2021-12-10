@@ -49,6 +49,68 @@ const StyledButton = styled.button`
   }
 `;
 
+const getCheckoutElements = (
+  addedNodes: any,
+  input: string,
+  submit: string
+) => {
+  let inputElem: HTMLInputElement | null = null;
+  let submitElem: HTMLButtonElement | null = null;
+
+  let index1 = 0;
+  while (addedNodes[index1]) {
+    let index2 = 0;
+    const addedNode = addedNodes[index1];
+    while (addedNode[index2]) {
+      const elem = addedNode[index2];
+      switch (`#${elem.id}`) {
+        case input:
+          inputElem = elem;
+          break;
+        case submit:
+          submitElem = elem;
+          break;
+      }
+      switch (elem.getAttribute("class")) {
+        case input:
+          inputElem = elem;
+          break;
+        case submit:
+          submitElem = elem;
+          break;
+      }
+      index2 += 1;
+    }
+
+    if ("nextElementSibling" in addedNodes[index1]) {
+      const nextElementSibling = addedNodes[index1]["nextElementSibling"];
+      if (nextElementSibling && nextElementSibling.querySelector) {
+        if (nextElementSibling.querySelector(input)) {
+          inputElem = nextElementSibling.querySelector(input);
+        } else if (nextElementSibling.querySelector(submit)) {
+          submitElem = nextElementSibling.querySelector(submit);
+        }
+      }
+    }
+
+    const nextElementSibling = addedNodes[index1];
+    if (nextElementSibling && nextElementSibling.querySelector) {
+      if (nextElementSibling.querySelector(input)) {
+        inputElem = nextElementSibling.querySelector(input);
+      } else if (nextElementSibling.querySelector(submit)) {
+        submitElem = nextElementSibling.querySelector(submit);
+      }
+    }
+
+    index1 += 1;
+  }
+
+  return {
+    inputElem,
+    submitElem,
+  };
+};
+
 const showCheckoutElements = async (
   input: Array<string>,
   submit: Array<string>
@@ -69,47 +131,16 @@ const showCheckoutElements = async (
   const p1 = new Promise<void>((resolve) => {
     observer = new MutationObserver((mutationsList, observer) => {
       mutationsList.forEach(({ addedNodes }: { addedNodes: any }) => {
-        let index1 = 0;
-        while (addedNodes[index1]) {
-          let index2 = 0;
-          const addedNode = addedNodes[index1];
-          while (addedNode[index2]) {
-            const elem = addedNode[index2];
-            switch (`#${elem.id}`) {
-              case input[input.length - 1]:
-                inputElem = elem;
-                break;
-              case submit[submit.length - 1]:
-                submitElem = elem;
-                break;
-            }
-            switch (elem.getAttribute("class")) {
-              case input[input.length - 1]:
-                inputElem = elem;
-                break;
-              case submit[submit.length - 1]:
-                submitElem = elem;
-                break;
-            }
-            index2 += 1;
-          }
-
-          if ("nextElementSibling" in addedNodes[index1]) {
-            const nextElementSibling = addedNodes[index1]["nextElementSibling"];
-            if (nextElementSibling.querySelector(input[input.length - 1])) {
-              inputElem = nextElementSibling.querySelector(
-                input[input.length - 1]
-              );
-            } else if (
-              nextElementSibling.querySelector(submit[submit.length - 1])
-            ) {
-              submitElem = nextElementSibling.querySelector(
-                submit[submit.length - 1]
-              );
-            }
-          }
-
-          index1 += 1;
+        const elems = getCheckoutElements(
+          addedNodes,
+          input[input.length - 1],
+          submit[submit.length - 1]
+        );
+        if (elems.inputElem) {
+          inputElem = elems.inputElem;
+        }
+        if (elems.submitElem) {
+          submitElem = elems.submitElem;
         }
       });
       observer.disconnect();
@@ -124,7 +155,7 @@ const showCheckoutElements = async (
     const rawElem = document.querySelector(elementClickOrder[index]);
     if (rawElem) {
       const elem = rawElem as HTMLButtonElement;
-      elem.click && elem.click();
+      elem && elem.click && elem.click();
     }
 
     setTimeout(() => {
@@ -167,12 +198,12 @@ const App: FC<AppProps> = ({ coupons, input, submit, onOpen, onClose }) => {
             submit
           );
 
-          const inputElem = revealedCheckoutElements.inputElem
+          let inputElem = revealedCheckoutElements.inputElem
             ? revealedCheckoutElements.inputElem
             : (document.querySelector(
                 input[input.length - 1]
               ) as HTMLInputElement);
-          const submitElem = revealedCheckoutElements.submitElem
+          let submitElem = revealedCheckoutElements.submitElem
             ? revealedCheckoutElements.submitElem
             : (document.querySelector(
                 submit[submit.length - 1]
@@ -185,6 +216,15 @@ const App: FC<AppProps> = ({ coupons, input, submit, onOpen, onClose }) => {
             inputElem.dispatchEvent(new Event("input", { bubbles: true }));
             submitElem.click && submitElem.click();
             void (await new Promise((resolve) => setTimeout(resolve, 2000)));
+
+            // TODO: Doesn't work when we have more than
+            // 1 coupon and the inputs need to be revealed
+            inputElem = document.querySelector(
+              input[input.length - 1]
+            ) as HTMLInputElement;
+            submitElem = document.querySelector(
+              submit[submit.length - 1]
+            ) as HTMLButtonElement;
           }
 
           // Well, we tried applying coupons
