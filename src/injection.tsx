@@ -11,7 +11,7 @@ import type { CouponData } from "./common/Schema";
 import type { AppProps as CouponAppProps } from "./injection/coupon/App";
 import type { AppProps as SearchAppProps } from "./injection/search/App";
 
-const HOST_NAME = "https://locality-ui-dev.herokuapp.com"; //"https://mylocality.shop";
+const HOST_NAME = "https://mylocality.shop";
 
 let open = true;
 let mouseDown = false;
