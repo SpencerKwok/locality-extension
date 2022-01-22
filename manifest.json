@@ -1,6 +1,6 @@
 {
   "name": "Locality - Local Shopping Made Easy",
-  "version": "0.0.0.20",
+  "version": "0.0.0.21",
   "manifest_version": 3,
   "description": "Instantly find products from locally owned small businesses in BC without changing your search habits! Shopping locally made simple.",
   "action": {
@@ -31,7 +31,8 @@
         "*://www.shophappybaby.ca/*",
         "*://www.thealfajorcompany.ca/*",
         "*://www.unimpressedofficial.com/*",
-        "*://shop.app/pay/transactions/new/token/*"
+        "*://shop.app/pay/transactions/new/token/*",
+        "*://marketplacebc.ca/marketplace/laid-back-snacks/*"
       ]
     }
   ],

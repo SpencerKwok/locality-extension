@@ -11,7 +11,7 @@ import type { CouponData } from "./common/Schema";
 import type { AppProps as CouponAppProps } from "./injection/coupon/App";
 import type { AppProps as SearchAppProps } from "./injection/search/App";
 
-const HOST_NAME = "https://mylocality.shop";
+const HOST_NAME = "https://www.mylocality.shop";
 
 let open = true;
 let mouseDown = false;
@@ -241,6 +241,48 @@ else if (window.location.host.match(/shop\.app/)) {
         .catch((err) => console.log(err));
     }
   });
+}
+
+// BC Market Place
+else if (window.location.host.match(/marketplacebc\.ca/)) {
+  chrome.runtime.sendMessage(
+    { message: "get", keys: ["email", "token"] },
+    (values: any) => {
+      const [cached_email, cached_token] = values;
+      const email = typeof cached_email === "string" ? cached_email : "";
+      const token = cached_token ? cached_token : "";
+      GetRpcClient.getInstance()
+        .call(
+          "Search",
+          "/search?q=&filters=business%3A%22Laid%20Back%20Snacks%22",
+          {
+            email,
+            token,
+          }
+        )
+        .then(({ hits }) => {
+          if (hits.length > 0) {
+            ReactDOM.render(
+              <SearchAppWrapper
+                email={email}
+                token={token}
+                initialHits={hits}
+                query={""}
+                filters={"business%3A%22Laid%20Back%20Snacks%22"}
+                onOpen={searchOnOpen}
+                onClose={searchOnClose}
+              />,
+              app
+            );
+          }
+
+          window.addEventListener("resize", searchOnResize);
+          window.addEventListener("unload", () => {
+            window.removeEventListener("resize", searchOnResize);
+          });
+        });
+    }
+  );
 } else {
   fetch(`${HOST_NAME}/api/extension/checkout/get`)
     .then((res) => res.json())

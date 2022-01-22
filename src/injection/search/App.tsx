@@ -16,6 +16,7 @@ export interface AppProps {
   query: string;
   onOpen: () => void;
   onClose: () => void;
+  filters?: string;
 }
 
 const onProductClick = (objectId: string): void => {
@@ -76,6 +77,7 @@ const App: FC<AppProps> = ({
   token,
   initialHits,
   query,
+  filters,
   onOpen,
   onClose,
 }) => {
@@ -170,9 +172,13 @@ const App: FC<AppProps> = ({
       <Stack direction="row" columnAlign="center">
         <Stack direction="column" rowAlign="center">
           <LocalityLogo height={60} width={200} />
-          <div style={{ marginBottom: 12 }}>
-            Results for "{query}" in your area!
-          </div>
+          {!filters ? (
+            <div style={{ marginBottom: 12 }}>
+              Results for "{query}" in your area!
+            </div>
+          ) : (
+            <div style={{ marginBottom: 12 }}>Products</div>
+          )}
           <Stack
             id="locality-products"
             direction="column"
@@ -201,10 +207,16 @@ const App: FC<AppProps> = ({
                 });
 
                 GetRpcClient.getInstance()
-                  .call("Search", `/search?q=${query}&pg=${results.page + 1}`, {
-                    email,
-                    token,
-                  })
+                  .call(
+                    "Search",
+                    `/search?q=${query}&pg=${results.page + 1}${
+                      filters ? `&filters=${filters}` : ""
+                    }`,
+                    {
+                      email,
+                      token,
+                    }
+                  )
                   .then(({ hits }) => {
                     if (hits.length === 0) {
                       setResults({
